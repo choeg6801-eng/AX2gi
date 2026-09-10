@@ -11,9 +11,18 @@ EXCHANGE_API_KEY = os.getenv("exchange_API_key")
 # 2. 페이지 설정
 st.set_page_config(page_title="글로벌 날씨 & 환율 대시보드", page_icon="🌍", layout="wide")
 
-# 3. 커스텀 CSS (들여쓰기 없음)
+# 3. 커스텀 CSS (배경색 및 레이아웃 스타일링)
 st.markdown("""
 <style>
+/* 💡 화면 전체 배경색을 파스텔 하늘색으로 변경 */
+[data-testid="stAppViewContainer"] {
+background-color: #E6F3FF;
+}
+/* 상단 기본 헤더 영역 투명화 */
+[data-testid="stHeader"] {
+background-color: rgba(0,0,0,0);
+}
+
 .info-card {
 background-color: #f8f9fa;
 border-radius: 15px;
@@ -83,7 +92,7 @@ selected_option = st.selectbox("✈️ 조회할 국가 및 도시를 선택하�
 target_city = LOCATION_DATA[selected_option]["city"]
 target_currency = LOCATION_DATA[selected_option]["currency"]
 currency_symbol = LOCATION_DATA[selected_option]["symbol"]
-country_name = selected_option.split(' ')[0] # '미국 (뉴욕)'에서 '미국'만 추출
+country_name = selected_option.split(' ')[0]
 
 st.title(f"🌍 {country_name} 실시간 대시보드")
 st.markdown("---")
@@ -153,9 +162,7 @@ with col2:
             
             st.markdown(f"**업데이트 기준일:** {e_data['time_last_update_utc'][:16]}")
             
-            # 💡 수정된 부분: 투명한 여백 대신 돈 모양 이모지(💰)를 삽입하고 날씨 아이콘과 높이를 맞춥니다.
-            # 💸, 💵, 🪙 등 다른 이모지로 변경하셔도 좋습니다.
-            st.markdown("<div style='font-size: 60px; line-height: 85px; height: 85px;'>💰</div>", unsafe_allow_html=True) 
+            st.markdown("<div style='font-size: 65px; height: 80px; display: flex; align-items: center; margin-bottom: 1rem;'>💵</div>", unsafe_allow_html=True) 
             
             exchange_html = f"""
 <div class="info-card">
