@@ -11,7 +11,7 @@ EXCHANGE_API_KEY = os.getenv("exchange_API_key")
 # 2. 페이지 설정
 st.set_page_config(page_title="글로벌 비즈니스 & 여행 대시보드", page_icon="🌍", layout="wide")
 
-# 3. 커스텀 CSS (연두색 세계지도 배경 및 카드 UI 스타일링)
+# 3. 커스텀 CSS (선택 박스 자몽색 테두리, 크기 확대, 중앙 정렬 등 스타일링)
 st.markdown("""
 <style>
 [data-testid="stAppViewContainer"] {
@@ -36,6 +36,18 @@ st.markdown("""
 [data-testid="stHeader"] {
     background-color: rgba(0,0,0,0);
 }
+
+/* 💡 선택 박스(selectbox) 테두리를 자몽색으로 변경하고 크기를 키움 */
+div[data-baseweb="select"] > div {
+    border-color: #FF7F50 !important; /* 자몽색 (Coral) */
+    border-width: 2px !important;
+    border-radius: 12px !important;
+    min-height: 50px !important;
+}
+div[data-baseweb="select"] span {
+    font-size: 1.1rem !important;
+}
+
 .info-card {
     background-color: rgba(248, 249, 250, 0.95);
     border-radius: 15px;
@@ -72,7 +84,6 @@ st.markdown("""
     color: #666666;
     margin-top: 5px;
 }
-/* 분석 박스 디자인 개선 (가독성 향상) */
 .analysis-container {
     display: flex;
     flex-direction: column;
@@ -105,7 +116,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 4. 지원 국가 데이터 (상세 정보 추가)
+# 4. 지원 국가 데이터
 LOCATION_DATA = {
     "미국 (뉴욕)": {
         "city": "New York", "currency": "USD", "symbol": "$", 
@@ -161,8 +172,8 @@ def get_exchange_rates(api_key):
         return response.json()
     return None
 
-# 6. 상단 선택기
-col_sel1, col_sel2, col_blank = st.columns([1.5, 1.5, 3])
+# 6. 💡 상단 선택기를 중앙 정렬 배치 (좌우에 빈 공간 컬럼을 두어 가운데로 모음)
+col_space1, col_sel1, col_sel2, col_space2 = st.columns([1, 2, 2, 1])
 with col_sel1:
     purpose = st.selectbox("🎯 사용 용도", ["여행용 🎒", "무역 실무용 💼"])
 with col_sel2:
@@ -258,7 +269,7 @@ with col2:
 """
             st.markdown(exchange_html, unsafe_allow_html=True)
 
-# ------------------ [맞춤형 정보 제공 (가독성 개선 및 상세 정보 추가)] ------------------
+# ------------------ [맞춤형 정보 제공 (심층 분석)] ------------------
 if w_data and e_data:
     st.markdown(f"### 📊 {purpose} 맞춤 심층 분석")
     
@@ -266,7 +277,6 @@ if w_data and e_data:
     base_rate = LOCATION_DATA[selected_option]['base_rate']
     
     if purpose == "여행용 🎒":
-        # 1. 날씨 분석
         weather_rec = "야외 활동을 하기에 쾌적하고 무난한 날씨입니다. 가벼운 발걸음으로 도시를 둘러보세요."
         if "비" in description or "눈" in description or "흐림" in description:
             weather_rec = "기상 상태가 좋지 않거나 비/눈 소식이 있습니다. 야외 일정보다는 박물관, 미술관, 대형 쇼핑몰 등 **실내 위주의 일정**을 강력히 추천합니다!"
@@ -275,7 +285,6 @@ if w_data and e_data:
         elif temp < 5:
             weather_rec = "날씨가 쌀쌀하거나 추우니 따뜻한 방한용품(목도리, 장갑, 패딩 등)을 꼭 챙기시고 실내 위주로 동선을 짜세요."
             
-        # 2. 환율 분석
         if compare_rate > base_rate * 1.02:
             rate_rec = f"현재 환율({compare_rate:,.0f}원)이 기준선({base_rate}원)보다 높은 **원화 약세 구간**입니다. 현지 체류 시 예산이 초과되지 않도록 지출 관리에 조금 더 신경 쓰는 것이 좋습니다."
         elif compare_rate < base_rate * 0.98:
@@ -283,7 +292,6 @@ if w_data and e_data:
         else:
             rate_rec = f"현재 환율이 평년 수준을 안정적으로 유지하고 있어, 계획하셨던 여행 예산을 무리 없이 소화할 수 있습니다."
 
-        # 가독성이 뛰어난 카드형 디자인 블록 출력
         st.markdown(f"""
         <div class="analysis-container">
             <div class="analysis-box" style="border-left-color: #3182CE;">
@@ -308,7 +316,7 @@ if w_data and e_data:
         </div>
         """, unsafe_allow_html=True)
         
-    else: # 무역 실무용
+    else: 
         if compare_rate > base_rate * 1.02:
             trade_rec = f"현재 환율({compare_rate:,.0f}원)이 기준선({base_rate}원)을 상회하는 <b>원화 약세장</b>입니다. <b>수출 기업</b>은 가격 경쟁력 확보 및 채산성 개선에 유리하며, <b>수입 기업</b>은 원가 부담이 커지므로 환헤지 및 계약 시점 조절이 필수적입니다."
         elif compare_rate < base_rate * 0.98:
