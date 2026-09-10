@@ -11,7 +11,7 @@ EXCHANGE_API_KEY = os.getenv("exchange_API_key")
 # 2. 페이지 설정
 st.set_page_config(page_title="글로벌 비즈니스 & 여행 대시보드", page_icon="🌍", layout="wide")
 
-# 3. 커스텀 CSS (목록바 길이 단축, 글자 크기 확대, 자몽색 테두리)
+# 3. 커스텀 CSS (목록바 글자 크기를 더 크게 키우고 박스 높이 조정)
 st.markdown("""
 <style>
 [data-testid="stAppViewContainer"] {
@@ -37,16 +37,16 @@ st.markdown("""
     background-color: rgba(0,0,0,0);
 }
 
-/* 목록바(셀렉트박스) 길이를 줄이고, 글자 크기를 키우며, 자몽색 테두리 적용 */
+/* 💡 목록바(셀렉트박스) 내부 글자 크기를 훨씬 크게 키움 (1.5rem) */
 div[data-baseweb="select"] > div {
     border-color: #FF7F50 !important; /* 자몽색 (Coral) */
     border-width: 2px !important;
     border-radius: 12px !important;
-    min-height: 55px !important;
+    min-height: 65px !important; /* 박스 높이도 글자에 맞춰 키움 */
 }
 div[data-baseweb="select"] span {
-    font-size: 1.25rem !important;
-    font-weight: 600 !important;
+    font-size: 1.5rem !important; /* 글자 크기 대폭 확대 */
+    font-weight: 700 !important;
 }
 
 .info-card {
