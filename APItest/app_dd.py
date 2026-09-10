@@ -11,7 +11,7 @@ EXCHANGE_API_KEY = os.getenv("exchange_API_key")
 # 2. 페이지 설정
 st.set_page_config(page_title="글로벌 비즈니스 & 여행 대시보드", page_icon="🌍", layout="wide")
 
-# 3. 커스텀 CSS (목록바 글자 크기를 더 크게 키우고 박스 높이 조정)
+# 3. 커스텀 CSS (목록바 글자 크기 확대 및 자몽색 테두리)
 st.markdown("""
 <style>
 [data-testid="stAppViewContainer"] {
@@ -37,15 +37,15 @@ st.markdown("""
     background-color: rgba(0,0,0,0);
 }
 
-/* 💡 목록바(셀렉트박스) 내부 글자 크기를 훨씬 크게 키움 (1.5rem) */
-div[data-baseweb="select"] > div {
-    border-color: #FF7F50 !important; /* 자몽색 (Coral) */
+/* 💡 셀렉트박스 글자 크기와 높이를 확실하게 키움 */
+.stSelectbox div[data-baseweb="select"] {
+    border-color: #FF7F50 !important; /* 자몽색 테두리 */
     border-width: 2px !important;
     border-radius: 12px !important;
-    min-height: 65px !important; /* 박스 높이도 글자에 맞춰 키움 */
+    min-height: 60px !important;
 }
-div[data-baseweb="select"] span {
-    font-size: 1.5rem !important; /* 글자 크기 대폭 확대 */
+.stSelectbox div[data-baseweb="select"] * {
+    font-size: 1.4rem !important; /* 글자 크기 강제 확대 */
     font-weight: 700 !important;
 }
 
@@ -173,8 +173,8 @@ def get_exchange_rates(api_key):
         return response.json()
     return None
 
-# 6. 상단 선택기 중앙 배치 및 크기 조절
-col_space1, col_sel1, col_sel2, col_space2 = st.columns([0.8, 1.5, 1.5, 0.8])
+# 6. 💡 좌우 여백을 넓혀서 셀렉트박스 길이를 자연스럽게 줄이고 중앙 배치
+col_space1, col_sel1, col_sel2, col_space2 = st.columns([2.0, 1.2, 1.2, 2.0])
 with col_sel1:
     purpose = st.selectbox("🎯 사용 용도", ["여행용 🎒", "무역 실무용 💼"])
 with col_sel2:
