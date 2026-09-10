@@ -336,7 +336,7 @@ if w_data and e_data:
                 <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_tip']}</div>
             </div>
         </div>
-        """, unsafe_allow_html5>
+        st.markdown(..., unsafe_allow_html5> # 5가 붙어 있어서 에러 발생
         
 # ------------------ [하단: 스위칭 환전 계산기] ------------------
 st.markdown("---") 
