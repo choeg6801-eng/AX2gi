@@ -61,8 +61,8 @@ LOCATION_DATA = {
     "호주 (시드니)": {"city": "Sydney", "currency": "AUD", "symbol": "$"}
 }
 
-# 5. API 호출 함수 (캐싱 적용: API 무료 호출 횟수 보호)
-@st.cache_data(ttl=600) # 날씨는 10분(600초) 동안 데이터 기억
+# 5. API 호출 함수 (캐싱 적용)
+@st.cache_data(ttl=600)
 def get_weather(city_name, api_key):
     url = f"http://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={api_key}&units=metric&lang=kr"
     response = requests.get(url)
@@ -70,7 +70,7 @@ def get_weather(city_name, api_key):
         return response.json()
     return None
 
-@st.cache_data(ttl=3600) # 환율은 1시간(3600초) 동안 데이터 기억
+@st.cache_data(ttl=3600)
 def get_exchange_rates(api_key):
     url = f"https://v6.exchangerate-api.com/v6/{api_key}/latest/USD"
     response = requests.get(url)
@@ -78,18 +78,16 @@ def get_exchange_rates(api_key):
         return response.json()
     return None
 
-# 6. 앱 UI 구성
-# 상단: 국가 선택
+# 6. 앱 UI 구성 (상단 선택기)
 selected_option = st.selectbox("✈️ 조회할 국가 및 도시를 선택하세요:", list(LOCATION_DATA.keys()))
 target_city = LOCATION_DATA[selected_option]["city"]
 target_currency = LOCATION_DATA[selected_option]["currency"]
 currency_symbol = LOCATION_DATA[selected_option]["symbol"]
+country_name = selected_option.split(' ')[0] # '미국 (뉴욕)'에서 '미국'만 추출
 
-# 타이틀 동적 변경
-st.title(f"🌍 {selected_option.split(' ')[0]} 실시간 대시보드")
+st.title(f"🌍 {country_name} 실시간 대시보드")
 st.markdown("---")
 
-# 레이아웃 분할
 col1, col2 = st.columns(2)
 
 # ------------------ [좌측: 날씨 정보] ------------------
@@ -133,9 +131,14 @@ with col1:
         else:
             st.error("날씨 정보를 불러오지 못했습니다.")
 
-# ------------------ [우측: 환율 및 계산기] ------------------
+# ------------------ [우측: 동적 환율 정보] ------------------
 with col2:
-    st.subheader(f"💱 환율 정보 & 환전 계산기")
+    # 타이틀에 선택한 국가명 반영
+    st.subheader(f"💱 {country_name} 환율 정보")
+    
+    target_to_krw = 0 # 계산기를 위해 변수 초기화
+    e_data = None
+    
     if not EXCHANGE_API_KEY:
         st.error("환율 API 키가 설정되지 않았습니다.")
     else:
@@ -143,11 +146,9 @@ with col2:
         if e_data and e_data.get("result") == "success":
             rates = e_data['conversion_rates']
             
-            # 환율 계산 (목표 통화 1단위 당 원화 가격)
             usd_to_krw = rates['KRW']
             target_to_krw = rates['KRW'] if target_currency == 'KRW' else (rates['KRW'] / rates[target_currency])
             
-            # JPY(엔화)의 경우 통상적으로 100엔 단위로 표기
             display_rate = target_to_krw * 100 if target_currency == 'JPY' else target_to_krw
             display_unit = "100 JPY" if target_currency == 'JPY' else f"1 {target_currency}"
             
@@ -169,17 +170,27 @@ with col2:
 </div>
 """
             st.markdown(exchange_html, unsafe_allow_html=True)
-            
-            # --- 환전 계산기 구현 ---
-            st.markdown("### 🧮 원화 환전 계산기")
-            krw_input = st.number_input("환전할 원화(KRW) 금액을 입력하세요:", min_value=0, value=100000, step=10000)
-            
-            if target_currency == "KRW":
-                exchanged_amount = krw_input
-            else:
-                exchanged_amount = krw_input / target_to_krw
-                
-            st.success(f"예상 환전 금액: **{currency_symbol} {exchanged_amount:,.2f}** ({target_currency})")
-            
         else:
             st.error("환율 정보를 불러오지 못했습니다.")
+
+# ------------------ [하단: 중앙 환전 계산기] ------------------
+st.markdown("---") # 시각적 분리를 위한 선
+
+if e_data and e_data.get("result") == "success":
+    # 1:2:1 비율로 화면을 나누어 가운데(2) 영역에 계산기를 배치하여 중앙 정렬 효과
+    col_space1, col_center, col_space2 = st.columns([1, 2, 1])
+    
+    with col_center:
+        # 타이틀도 동적으로 변경 (예: USD ➔ 원화(KRW) 환전 계산기)
+        st.markdown(f"<h3 style='text-align: center;'>🧮 {target_currency} ➔ 원화(KRW) 환전 계산기</h3>", unsafe_allow_html=True)
+        
+        # 입력받는 기준을 해당 국가 통화로 변경
+        input_amount = st.number_input(f"환전할 {country_name} 금액({target_currency})을 입력하세요:", min_value=0.0, value=100.0, step=10.0)
+        
+        # 외화를 원화로 계산 (입력값 * 1단위당 원화 환율)
+        if target_currency == "KRW":
+            krw_result = input_amount
+        else:
+            krw_result = input_amount * target_to_krw
+            
+        st.success(f"예상 환전 금액: **{krw_result:,.0f} 원(KRW)**")
