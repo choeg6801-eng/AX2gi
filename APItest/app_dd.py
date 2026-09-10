@@ -111,12 +111,15 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 4. 지원 국가 데이터 (핫플레이스 이미지 URL 추가)
+# 4. 💡 전체 지원 국가 데이터 복구 (미국, 독일, 일본, 영국, 호주)
 LOCATION_DATA = {
     "미국 (뉴욕)": {
         "city": "New York", "currency": "USD", "symbol": "$", 
         "base_rate": 1350, "price_level": "약 140% (주거 및 외식비 높음)", 
-        "trade_tip": "주요 수출품: 자동차, 기계류. 통상 압박 모니터링 필수. 직설적인 화법 선호.",
+        "trade_export": "자동차, 반도체, 기계류, 석유제품",
+        "trade_culture": "결론 우선 직설적 화법 선호, 계약서 상의 문서 증빙과 준법 정신을 극도로 중시",
+        "trade_economy": "견조한 소비 중심 성장이나 고금리 장기화로 인한 자금 조달 비용 부담 존재",
+        "trade_tip": "주요 수출품: 자동차, 기계류. 통상 압박(IRA 등) 모니터링 필수.",
         "packing_tip": "멀티탭(110V), 편한 운동화, 일교차 겉옷",
         "must_visit": "센트럴 파크, 타임스퀘어, 브로드웨이",
         "images": [
@@ -128,7 +131,10 @@ LOCATION_DATA = {
     "독일 (베를린)": {
         "city": "Berlin", "currency": "EUR", "symbol": "€", 
         "base_rate": 1450, "price_level": "약 110% (마트 물가는 저렴함)", 
-        "trade_tip": "주요 수출품: 배터리, 화학제품. 환경/안전 규제 엄격. 계약서 중시.",
+        "trade_export": "자동차부품, 배터리, 화학제품, 기계",
+        "trade_culture": "엄격한 규정과 절차 준수, 공사 구분 명확, 철저한 사전 서면 검토 요구",
+        "trade_economy": "제조업 부진 및 에너지 전환 비용 증가로 인해 완만한 성장 정체 국면",
+        "trade_tip": "주요 수출품: 배터리, 화학제품. CE 인증 등 환경/안전 규제 엄격.",
         "packing_tip": "EU 어댑터, 방수 바람막이, 동전 지갑",
         "must_visit": "브란덴부르크 문, 베를린 장벽, 박물관 섬",
         "images": [
@@ -140,7 +146,10 @@ LOCATION_DATA = {
     "일본 (도쿄)": {
         "city": "Tokyo", "currency": "JPY", "symbol": "¥", 
         "base_rate": 900, "price_level": "약 90% (엔저로 체감 물가 낮음)", 
-        "trade_tip": "주요 수출품: 철강, 전자부품. 품질 기준 까다로움. 대면 미팅 및 예절 중시.",
+        "trade_export": "철강, 반도체 장비, 전자부품, 자동차",
+        "trade_culture": "격식 있는 호칭과 철저한 비즈니스 예절(명함 교환 등), 신뢰 구축 중시",
+        "trade_economy": "완만한 임금 상승과 관광객 유입으로 내수 회복세이나 엔화 변동성 주의",
+        "trade_tip": "주요 수출품: 철강, 전자부품. 품질 기준이 까다로우며 신뢰 구축에 장기 소요.",
         "packing_tip": "동전 지갑, 돼지코(110V), 숙소용 슬리퍼",
         "must_visit": "시부야 스크램블, 센소지, 도쿄타워",
         "images": [
@@ -152,7 +161,10 @@ LOCATION_DATA = {
     "영국 (런던)": {
         "city": "London", "currency": "GBP", "symbol": "£", 
         "base_rate": 1700, "price_level": "약 145% (교통비/주거비 최고 수준)", 
-        "trade_tip": "주요 수출품: 승용차, 바이오. 독자 UKCA 인증 도입. 우회적 화법 주의.",
+        "trade_export": "승용차, 의약품, 바이오, 기계류",
+        "trade_culture": "우회적이고 정중한 화법 사용, 비즈니스 네트워킹과 신용도 매우 중시",
+        "trade_economy": "서비스 산업 중심의 경제이나 고금리 및 브렉시트 여파로 성장 둔화 압력",
+        "trade_tip": "주요 수출품: 승용차, 바이오. 독자 영국 인증(UKCA) 제도 확인 필수.",
         "packing_tip": "BF타입 어댑터, 튼튼한 3단 우산, 컨택리스 카드",
         "must_visit": "대영박물관, 런던 아이, 타워 브리지",
         "images": [
@@ -164,7 +176,10 @@ LOCATION_DATA = {
     "호주 (시드니)": {
         "city": "Sydney", "currency": "AUD", "symbol": "$", 
         "base_rate": 880, "price_level": "약 130% (외식/인건비 높음)", 
-        "trade_tip": "주요 수출품: 석유제품, 자동차. 검역(목재·식품 등) 세계 최고 수준으로 엄격.",
+        "trade_export": "석유제품, 자동차, 기계, 정밀기기",
+        "trade_culture": "워라밸을 중시하며 수평적이고 실용적인 커뮤니케이션 선호",
+        "trade_economy": "자원 수출 호조를 보이고 있으나 높은 인플레이션과 금리 압박 존재",
+        "trade_tip": "주요 수출품: 석유제품, 자동차. 검역(목재·식품 등) 규제가 세계 최고 수준.",
         "packing_tip": "O타입 어댑터, 자외선 차단제, 수영복",
         "must_visit": "오페라 하우스, 하버브리지, 본다이 비치",
         "images": [
@@ -289,7 +304,7 @@ with col2:
 """
             st.markdown(exchange_html, unsafe_allow_html=True)
 
-# ------------------ [맞춤형 정보 제공 (4등분 가로 나란히 배치 & 사진 첨부)] ------------------
+# ------------------ [맞춤형 정보 제공 (4분할 가로 나란히 배치)] ------------------
 if w_data and e_data:
     st.markdown(f"### 📊 {purpose} 맞춤 심층 분석")
     
@@ -312,7 +327,6 @@ if w_data and e_data:
         else:
             rate_rec = "현재 환율이 평년 수준을 유지하고 있어 계획하신 예산대로 안정적인 여행이 가능합니다."
 
-        # 여행용 4개 항목을 4등분(st.columns(4))으로 가로 나란히 배치
         col_t1, col_t2, col_t3, col_t4 = st.columns(4)
         
         with col_t1:
@@ -350,7 +364,6 @@ if w_data and e_data:
             </div>
             """, unsafe_allow_html=True)
             
-        # 💡 핫플레이스 정보 밑에 사진들을 3등분으로 가로 나란히 첨부
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown(f"#### 📸 {country_name} 추천 핫플레이스 포토 갤러리")
         img_cols = st.columns(3)
@@ -360,29 +373,45 @@ if w_data and e_data:
             with col:
                 st.image(city_images[idx], use_container_width=True)
         
-    else: # 무역 실무용
+    else: # 무역 실무용 (4분할 가로 나란히 배치)
         if compare_rate > base_rate * 1.02:
-            trade_rec = f"현재 환율({compare_rate:,.0f}원)이 기준선 상회하는 <b>원화 약세장</b>입니다. <b>수출 기업</b>은 가격 경쟁력 확보에 유리하며, <b>수입 기업</b>은 원가 부담이 커져 환헤지 조절이 필수적입니다."
+            trade_rec = f"현재 환율({compare_rate:,.0f}원) 상회하는 <b>원화 약세장</b>: <b>수출 기업</b> 가격 경쟁력 확보 유리, <b>수입 기업</b> 원가 부담 증가로 환헤지 필수."
         elif compare_rate < base_rate * 0.98:
-            trade_rec = f"현재 환율({compare_rate:,.0f}원)이 기준선 하회하는 <b>원화 강세장</b>입니다. <b>수입 기업</b>은 원자재 단가를 낮출 수 있으나, <b>수출 기업</b>은 가격 경쟁력 약화에 대비한 전략 점검이 필요합니다."
+            trade_rec = f"현재 환율({compare_rate:,.0f}원) 하회하는 <b>원화 강세장</b>: <b>수입 기업</b> 원자재 단가 절감 유리, <b>수출 기업</b> 채산성 악화 대비 전략 필요."
         else:
             trade_rec = "현재 환율이 안정적인 박스권을 보이며 환 리스크 부담이 적어 평소 기준에 맞춘 안정적인 대외 거래가 가능합니다."
 
-        col_m1, col_m2 = st.columns(2)
+        col_m1, col_m2, col_m3, col_m4 = st.columns(4)
         
         with col_m1:
             st.markdown(f"""
-            <div class="analysis-box" style="border-left-color: #E53E3E;">
-                <div class="analysis-title">📈 수출입 전략 가이드</div>
-                <div class="analysis-content">{trade_rec}</div>
+            <div class="analysis-box" style="border-left-color: #DD6B20;">
+                <div class="analysis-title">📦 주요 수출입품</div>
+                <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_export']}</div>
             </div>
             """, unsafe_allow_html=True)
             
         with col_m2:
             st.markdown(f"""
-            <div class="analysis-box" style="border-left-color: #DD6B20;">
-                <div class="analysis-title">💡 {country_name} 비즈니스 실무 팁</div>
-                <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_tip']}</div>
+            <div class="analysis-box" style="border-left-color: #D69E2E;">
+                <div class="analysis-title">🤝 비즈니스 문화</div>
+                <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_culture']}</div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with col_m3:
+            st.markdown(f"""
+            <div class="analysis-box" style="border-left-color: #3182CE;">
+                <div class="analysis-title">📊 경제 상황</div>
+                <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_economy']}</div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with col_m4:
+            st.markdown(f"""
+            <div class="analysis-box" style="border-left-color: #E53E3E;">
+                <div class="analysis-title">📈 환율 기반 전략</div>
+                <div class="analysis-content">{trade_rec}</div>
             </div>
             """, unsafe_allow_html=True)
 
