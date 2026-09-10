@@ -133,10 +133,9 @@ with col1:
 
 # ------------------ [우측: 동적 환율 정보] ------------------
 with col2:
-    # 타이틀에 선택한 국가명 반영
     st.subheader(f"💱 {country_name} 환율 정보")
     
-    target_to_krw = 0 # 계산기를 위해 변수 초기화
+    target_to_krw = 0 
     e_data = None
     
     if not EXCHANGE_API_KEY:
@@ -153,7 +152,10 @@ with col2:
             display_unit = "100 JPY" if target_currency == 'JPY' else f"1 {target_currency}"
             
             st.markdown(f"**업데이트 기준일:** {e_data['time_last_update_utc'][:16]}")
-            st.markdown("<div style='height: 85px;'></div>", unsafe_allow_html=True) 
+            
+            # 💡 수정된 부분: 투명한 여백 대신 돈 모양 이모지(💰)를 삽입하고 날씨 아이콘과 높이를 맞춥니다.
+            # 💸, 💵, 🪙 등 다른 이모지로 변경하셔도 좋습니다.
+            st.markdown("<div style='font-size: 60px; line-height: 85px; height: 85px;'>💰</div>", unsafe_allow_html=True) 
             
             exchange_html = f"""
 <div class="info-card">
@@ -174,20 +176,16 @@ with col2:
             st.error("환율 정보를 불러오지 못했습니다.")
 
 # ------------------ [하단: 중앙 환전 계산기] ------------------
-st.markdown("---") # 시각적 분리를 위한 선
+st.markdown("---") 
 
 if e_data and e_data.get("result") == "success":
-    # 1:2:1 비율로 화면을 나누어 가운데(2) 영역에 계산기를 배치하여 중앙 정렬 효과
     col_space1, col_center, col_space2 = st.columns([1, 2, 1])
     
     with col_center:
-        # 타이틀도 동적으로 변경 (예: USD ➔ 원화(KRW) 환전 계산기)
         st.markdown(f"<h3 style='text-align: center;'>🧮 {target_currency} ➔ 원화(KRW) 환전 계산기</h3>", unsafe_allow_html=True)
         
-        # 입력받는 기준을 해당 국가 통화로 변경
         input_amount = st.number_input(f"환전할 {country_name} 금액({target_currency})을 입력하세요:", min_value=0.0, value=100.0, step=10.0)
         
-        # 외화를 원화로 계산 (입력값 * 1단위당 원화 환율)
         if target_currency == "KRW":
             krw_result = input_amount
         else:
