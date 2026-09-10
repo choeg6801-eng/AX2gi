@@ -11,12 +11,13 @@ EXCHANGE_API_KEY = os.getenv("exchange_API_key")
 # 2. 페이지 설정
 st.set_page_config(page_title="글로벌 비즈니스 & 여행 대시보드", page_icon="🌍", layout="wide")
 
-# 3. 커스텀 CSS
+# 3. 커스텀 CSS (목록바 글자 크기 대폭 확대 및 자몽색 테두리)
 st.markdown("""
 <style>
 [data-testid="stAppViewContainer"] {
     background-color: #F4F9F4;
 }
+/* 세계지도 배경에 연두색 필터 및 투명도 적용 */
 [data-testid="stAppViewContainer"]::before {
     content: "";
     position: fixed;
@@ -35,8 +36,10 @@ st.markdown("""
 [data-testid="stHeader"] {
     background-color: rgba(0,0,0,0);
 }
+
+/* 셀렉트박스 글자 크기를 더 크게 키우고 박스 높이 조정 */
 .stSelectbox div[data-baseweb="select"] {
-    border-color: #FF7F50 !important;
+    border-color: #FF7F50 !important; /* 자몽색 테두리 */
     border-width: 2px !important;
     border-radius: 12px !important;
     min-height: 75px !important;
@@ -46,6 +49,7 @@ st.markdown("""
     font-size: 1.8rem !important;
     font-weight: 700 !important;
 }
+
 .info-card {
     background-color: rgba(248, 249, 250, 0.95);
     border-radius: 15px;
@@ -107,17 +111,12 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 4. 지원 국가 데이터 (비자, 음식, 수출입, 경제 상황 상세 추가)
+# 4. 지원 국가 데이터 (남미 및 스페인 추가)
 LOCATION_DATA = {
     "미국 (뉴욕)": {
         "city": "New York", "currency": "USD", "symbol": "$", 
         "base_rate": 1350, "price_level": "약 140% (주거 및 외식비 높음)", 
-        "visa_free": "ESTA 사전 승인 시 최대 90일 체류 가능",
-        "must_eat": "뉴욕 스타일 피자, 뉴욕 치즈케이크, 햄버거(셰이크셰이크)",
-        "export_item": "자동차, 반도체, 항공기, 기계류, 화학공업제품",
-        "import_item": "원유, 의약품, 컴퓨터, 통신기기, 채굴기",
-        "biz_culture": "결론 우선주의(BLUNT 화법), 철저한 시간 준수, 계약서 기반의 비즈니스 진행",
-        "econ_status": "견조한 소비 중심 성장세이나 고금리 장기화 및 상업용 부동산 리스크 상존",
+        "trade_tip": "주요 수출품: 자동차, 기계류. 통상 압박 모니터링 필수. 직설적인 화법 선호.",
         "packing_tip": "멀티탭(110V), 편한 운동화, 일교차 겉옷",
         "must_visit": "센트럴 파크, 타임스퀘어, 브로드웨이",
         "images": [
@@ -129,12 +128,7 @@ LOCATION_DATA = {
     "독일 (베를린)": {
         "city": "Berlin", "currency": "EUR", "symbol": "€", 
         "base_rate": 1450, "price_level": "약 110% (마트 물가는 저렴함)", 
-        "visa_free": "무비자 관광 목적 최대 90일 체류 가능 (180일 기준)",
-        "must_eat": "커리부르스트(Currywurst), 슈바인학센, 프레첼과 맥주",
-        "export_item": "자동차 및 부품, 기계류, 화학제품, 전자의기",
-        "import_item": "전기기기, 원유 및 천연가스, 자동차 부품, 컴퓨터",
-        "biz_culture": "문서 증빙 및 규정 준수를 극도로 중시, 철저한 공사 구분, 격식 있는 호칭 사용",
-        "econ_status": "제조업 부진 및 에너지 전환 비용 증가로 인해 완만한 성장 정체 국면",
+        "trade_tip": "주요 수출품: 배터리, 화학제품. 환경/안전 규제 엄격. 계약서 중시.",
         "packing_tip": "EU 어댑터, 방수 바람막이, 동전 지갑",
         "must_visit": "브란덴부르크 문, 베를린 장벽, 박물관 섬",
         "images": [
@@ -146,12 +140,7 @@ LOCATION_DATA = {
     "일본 (도쿄)": {
         "city": "Tokyo", "currency": "JPY", "symbol": "¥", 
         "base_rate": 900, "price_level": "약 90% (엔저로 체감 물가 낮음)", 
-        "visa_free": "관광 목적 무비자 최대 90일 체류 가능",
-        "must_eat": "스시, 라멘, 몬쟈야끼, 톤카츠",
-        "export_item": "자동차, 반도체 제조장비, 철강, 화학제품, 발전기",
-        "import_item": "원유 및 액화천연가스(LNG), 의약품, 통신기기, 의류",
-        "biz_culture": "신뢰 구축 중심의 장기적 관계 지향, 철저한 대면 비즈니스 예절(명함 교환 등)",
-        "econ_status": "완만한 임금 인상과 완화적 통화정책 기조 속에서 점진적 경기 회복세",
+        "trade_tip": "주요 수출품: 철강, 전자부품. 품질 기준 까다로움. 대면 미팅 및 예절 중시.",
         "packing_tip": "동전 지갑, 돼지코(110V), 숙소용 슬리퍼",
         "must_visit": "시부야 스크램블, 센소지, 도쿄타워",
         "images": [
@@ -163,12 +152,7 @@ LOCATION_DATA = {
     "영국 (런던)": {
         "city": "London", "currency": "GBP", "symbol": "£", 
         "base_rate": 1700, "price_level": "약 145% (교통비/주거비 최고 수준)", 
-        "visa_free": "무비자 관광 목적 최대 6개월 체류 가능",
-        "must_eat": "피쉬 앤 칩스, 선데이 로스트, 애프터눈 티",
-        "export_item": "기계류, 의약품, 자동차, 항공기 부품, 주류(위스키)",
-        "import_item": "기계장치, 원유, 승용차, 의약품, 컴퓨터",
-        "biz_culture": "간접적이고 예의 바른 우회적 화법, 스몰토크(날씨 등)로 미팅 시작",
-        "econ_status": "브렉시트 이후 공급망 재편 및 고물가 여파로 완만한 회복 흐름",
+        "trade_tip": "주요 수출품: 승용차, 바이오. 독자 UKCA 인증 도입. 우회적 화법 주의.",
         "packing_tip": "BF타입 어댑터, 튼튼한 3단 우산, 컨택리스 카드",
         "must_visit": "대영박물관, 런던 아이, 타워 브리지",
         "images": [
@@ -180,18 +164,62 @@ LOCATION_DATA = {
     "호주 (시드니)": {
         "city": "Sydney", "currency": "AUD", "symbol": "$", 
         "base_rate": 880, "price_level": "약 130% (외식/인건비 높음)", 
-        "visa_free": "ETA(전자여행허가) 사전 승인 시 최대 3개월 체류 가능",
-        "must_eat": "미트파이, 피쉬앤칩스(본다이 비치), 호주식 브런치와 플랫화이트",
-        "export_item": "철광석, 석탄, LNG(천연가스), 금, 소고기 및 농축산물",
-        "import_item": "정제유, 승용차, 화물자동차, 텔레콤 장비, 의약품",
-        "biz_culture": "수평적이고 실용적인 분위기, 워라밸을 중시하며 빠른 의사결정 선호",
-        "econ_status": "자원 수출 호조를 바탕으로 안정적 성장세를 보이나 주택 가격 및 가계 부채 부담 존재",
+        "trade_tip": "주요 수출품: 석유제품, 자동차. 검역(목재·식품 등) 세계 최고 수준으로 엄격.",
         "packing_tip": "O타입 어댑터, 자외선 차단제, 수영복",
         "must_visit": "오페라 하우스, 하버브리지, 본다이 비치",
         "images": [
             "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=600&q=80",
             "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=600&q=80",
             "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    # 💡 스페인 및 남미 신규 추가
+    "스페인 (마드리드)": {
+        "city": "Madrid", "currency": "EUR", "symbol": "€", 
+        "base_rate": 1450, "price_level": "약 85% (서유럽 대비 식비와 물가가 저렴한 편)", 
+        "trade_tip": "주요 수출품: 자동차 부품, 기계. 친근한 스킨십과 인간관계를 중시하는 비즈니스 문화.",
+        "packing_tip": "C/F타입 어댑터, 소매치기 방지 백팩, 선글라스",
+        "must_visit": "마요르 광장, 프라도 미술관, 베네베르 왕궁",
+        "images": [
+            "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1543783207-ec64e4d95325?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    "아르헨티나 (부에노스아이레스)": {
+        "city": "Buenos Aires", "currency": "ARS", "symbol": "$", 
+        "base_rate": 1.5, "price_level": "약 60% (현지 식료품 및 소고기 물가는 매우 저렴함)", 
+        "trade_tip": "주요 수출품: 농산물, 광물. 경제 변동성이 크므로 대금 결제 안정성(신용장 등) 확보가 최우선.",
+        "packing_tip": "현금(달러) 비상금 지참 필수, 소매치기 대비 복대, C형/I형 겸용 어댑터",
+        "must_visit": "보카 지구(카미니토), 레콜레타 묘지, 탱고 거리",
+        "images": [
+            "https://images.unsplash.com/photo-1589909202874-17f1469d7cd2?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1612294037637-ec328cc4e03b?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1512551989508-25ad21c60d84?auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    "칠레 (산티아고)": {
+        "city": "Santiago", "currency": "CLP", "symbol": "$", 
+        "base_rate": 1.4, "price_level": "약 80% (남미에서 물가가 가장 안정적이고 치안이 우수한 편)", 
+        "trade_tip": "주요 수출품: 구리, 임산물, 와인. 한국과 FTA 체결국으로 무역 절차가 비교적 투명함.",
+        "packing_tip": "자외선 차단제(안데스 산맥 부근 자외선 강함), C/L형 어댑터, 가벼운 외투",
+        "must_visit": "아르마스 광장, 산크리스토발 언덕, 콘차이토로 와이너리",
+        "images": [
+            "https://images.unsplash.com/photo-1518638150340-f706e86654de?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1578922714855-6b5a2f9435b5?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1528728329032-2972f65dfb3f?auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    "멕시코 (멕시코시티)": {
+        "city": "Mexico City", "currency": "MXN", "symbol": "$", 
+        "base_rate": 75, "price_level": "약 70% (외식 및 로컬 물가는 저렴하나 관광지는 높은 편)", 
+        "trade_tip": "주요 수출품: 자동차, 전자제품. USMCA 공급망 중심지. 신뢰 관계(인맥)를 중요시함.",
+        "packing_tip": "고산병 대비 상비약, 생수(수돗물 음용 금지), A/B형 어댑터",
+        "must_visit": "소칼로 광장, 테오티우칸 피라미드, 프리다 칼로 박물관",
+        "images": [
+            "https://images.unsplash.com/photo-1512813266854-524eec1bc104?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1585464231875-d9449552d80d?auto=format&fit=crop&w=600&q=80"
         ]
     }
 }
@@ -310,7 +338,7 @@ with col2:
 """
             st.markdown(exchange_html, unsafe_allow_html=True)
 
-# ------------------ [맞춤형 정보 제공 (심층 분석)] ------------------
+# ------------------ [맞춤형 정보 제공 (4등분 가로 나란히 배치 & 사진 첨부)] ------------------
 if w_data and e_data:
     st.markdown(f"### 📊 {purpose} 맞춤 심층 분석")
     
@@ -327,13 +355,12 @@ if w_data and e_data:
             weather_rec = "날씨가 쌀쌀하거나 추우니 따뜻한 방한용품을 꼭 챙기시고 실내 위주로 동선을 짜세요."
             
         if compare_rate > base_rate * 1.02:
-            rate_rec = f"현재 환율({compare_rate:,.0f}원)이 기준선보다 높은 **원화 약세 구간**입니다. 현지 체류 시 예산 관리에 유의하세요."
+            rate_rec = f"현재 환율이 기준선보다 높은 **원화 약세 구간**입니다. 현지 체류 시 예산 관리에 유의하세요."
         elif compare_rate < base_rate * 0.98:
-            rate_rec = f"현재 환율({compare_rate:,.0f}원)이 기준선보다 낮은 **원화 강세 구간**입니다. 쇼핑과 기념품 구매를 즐기기 매우 좋은 시기입니다!"
+            rate_rec = f"현재 환율이 기준선보다 낮은 **원화 강세 구간**입니다. 쇼핑과 기념품 구매를 즐기기 매우 좋은 시기입니다!"
         else:
             rate_rec = "현재 환율이 평년 수준을 유지하고 있어 계획하신 예산대로 안정적인 여행이 가능합니다."
 
-        # 💡 여행용 4개 항목 (4등분 가로 나란히 배치)
         col_t1, col_t2, col_t3, col_t4 = st.columns(4)
         
         with col_t1:
@@ -347,21 +374,18 @@ if w_data and e_data:
         with col_t2:
             st.markdown(f"""
             <div class="analysis-box" style="border-left-color: #38A169;">
-                <div class="analysis-title">🛂 비자 및 체류 정보</div>
-                <div class="analysis-content">
-                    <b>• 체류 가능:</b> {LOCATION_DATA[selected_option]['visa_free']}<br><br>
-                    <b>• 환율 팁:</b> {rate_rec}
-                </div>
+                <div class="analysis-title">💵 환율 예산 팁</div>
+                <div class="analysis-content">{rate_rec}</div>
             </div>
             """, unsafe_allow_html=True)
             
         with col_t3:
             st.markdown(f"""
             <div class="analysis-box" style="border-left-color: #D69E2E;">
-                <div class="analysis-title">🍽️ 꼭 먹어야 할 음식</div>
+                <div class="analysis-title">🛒 물가 및 준비물</div>
                 <div class="analysis-content">
-                    <b>• 추천 메뉴:</b> {LOCATION_DATA[selected_option]['must_eat']}<br><br>
-                    <b>• 현지 물가:</b> {LOCATION_DATA[selected_option]['price_level']}
+                    <b>• 물가:</b> {LOCATION_DATA[selected_option]['price_level']}<br><br>
+                    <b>• 준비물:</b> {LOCATION_DATA[selected_option]['packing_tip']}
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -369,15 +393,11 @@ if w_data and e_data:
         with col_t4:
             st.markdown(f"""
             <div class="analysis-box" style="border-left-color: #805AD5;">
-                <div class="analysis-title">📍 필수 준비물 & 명소</div>
-                <div class="analysis-content">
-                    <b>• 준비물:</b> {LOCATION_DATA[selected_option]['packing_tip']}<br><br>
-                    <b>• 핫플:</b> {LOCATION_DATA[selected_option]['must_visit']}
-                </div>
+                <div class="analysis-title">📍 추천 핫플레이스</div>
+                <div class="analysis-content">{LOCATION_DATA[selected_option]['must_visit']}</div>
             </div>
             """, unsafe_allow_html=True)
             
-        # 핫플레이스 포토 갤러리 (3등분 가로 나란히)
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown(f"#### 📸 {country_name} 추천 핫플레이스 포토 갤러리")
         img_cols = st.columns(3)
@@ -387,49 +407,29 @@ if w_data and e_data:
             with col:
                 st.image(city_images[idx], use_container_width=True)
         
-    else: # 무역 실무용 (4개 항목을 2x2 또는 4등분 배치하여 가독성 강화)
+    else: # 무역 실무용
         if compare_rate > base_rate * 1.02:
-            trade_rec = f"현재 환율({compare_rate:,.0f}원) 상회하는 **원화 약세장**: 수출 기업 유리, 수입 기업 원가 부담."
+            trade_rec = f"현재 환율이 기준선 상회하는 <b>원화 약세장</b>입니다. <b>수출 기업</b>은 가격 경쟁력 확보에 유리하며, <b>수입 기업</b>은 원가 부담이 커져 환헤지 조절이 필수적입니다."
         elif compare_rate < base_rate * 0.98:
-            trade_rec = f"현재 환율({compare_rate:,.0f}원) 하회하는 **원화 강세장**: 수입 기업 유리, 수출 기업 채산성 점검 필요."
+            trade_rec = f"현재 환율이 기준선 하회하는 <b>원화 강세장</b>입니다. <b>수입 기업</b>은 원자재 단가를 낮출 수 있으나, <b>수출 기업</b>은 가격 경쟁력 약화에 대비한 전략 점검이 필요합니다."
         else:
-            trade_rec = "현재 환율 안정세: 환 리스크 부담이 적어 안정적인 대외 거래 진행 가능."
+            trade_rec = "현재 환율이 안정적인 박스권을 보이며 환 리스크 부담이 적어 평소 기준에 맞춘 안정적인 대외 거래가 가능합니다."
 
-        # 💡 무역 실무용 4개 항목을 4등분(st.columns(4))으로 가로 나란히 배치
-        col_m1, col_m2, col_m3, col_m4 = st.columns(4)
+        col_m1, col_m2 = st.columns(2)
         
         with col_m1:
             st.markdown(f"""
             <div class="analysis-box" style="border-left-color: #E53E3E;">
-                <div class="analysis-title">📦 주요 수출입품</div>
-                <div class="analysis-content">
-                    <b>• 수출:</b> {LOCATION_DATA[selected_option]['export_item']}<br><br>
-                    <b>• 수입:</b> {LOCATION_DATA[selected_option]['import_item']}
-                </div>
+                <div class="analysis-title">📈 수출입 전략 가이드</div>
+                <div class="analysis-content">{trade_rec}</div>
             </div>
             """, unsafe_allow_html=True)
             
         with col_m2:
             st.markdown(f"""
             <div class="analysis-box" style="border-left-color: #DD6B20;">
-                <div class="analysis-title">🤝 비즈니스 문화</div>
-                <div class="analysis-content">{LOCATION_DATA[selected_option]['biz_culture']}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        with col_m3:
-            st.markdown(f"""
-            <div class="analysis-box" style="border-left-color: #3182CE;">
-                <div class="analysis-title">📊 경제 상황</div>
-                <div class="analysis-content">{LOCATION_DATA[selected_option]['econ_status']}</div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        with col_m4:
-            st.markdown(f"""
-            <div class="analysis-box" style="border-left-color: #38A169;">
-                <div class="analysis-title">📈 환율 기반 전략</div>
-                <div class="analysis-content">{trade_rec}</div>
+                <div class="analysis-title">💡 {country_name} 비즈니스 실무 팁</div>
+                <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_tip']}</div>
             </div>
             """, unsafe_allow_html=True)
 
