@@ -11,7 +11,7 @@ EXCHANGE_API_KEY = os.getenv("exchange_API_key")
 # 2. 페이지 설정
 st.set_page_config(page_title="글로벌 비즈니스 & 여행 대시보드", page_icon="🌍", layout="wide")
 
-# 3. 커스텀 CSS (목록바 글자 크기 확대 및 자몽색 테두리)
+# 3. 커스텀 CSS (목록바 글자 크기 대폭 확대 및 자몽색 테두리)
 st.markdown("""
 <style>
 [data-testid="stAppViewContainer"] {
@@ -37,15 +37,16 @@ st.markdown("""
     background-color: rgba(0,0,0,0);
 }
 
-/* 💡 셀렉트박스 글자 크기와 높이를 확실하게 키움 */
+/* 셀렉트박스 글자 크기를 더 크게 키우고 박스 높이 조정 */
 .stSelectbox div[data-baseweb="select"] {
     border-color: #FF7F50 !important; /* 자몽색 테두리 */
     border-width: 2px !important;
     border-radius: 12px !important;
-    min-height: 60px !important;
+    min-height: 75px !important;
 }
-.stSelectbox div[data-baseweb="select"] * {
-    font-size: 1.4rem !important; /* 글자 크기 강제 확대 */
+.stSelectbox div[data-baseweb="select"] span,
+.stSelectbox div[data-baseweb="select"] div {
+    font-size: 1.8rem !important; /* 글자 크기 대폭 확대 */
     font-weight: 700 !important;
 }
 
@@ -85,26 +86,19 @@ st.markdown("""
     color: #666666;
     margin-top: 5px;
 }
-.analysis-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 15px;
-    position: relative;
-    z-index: 1;
-}
 .analysis-box {
     background-color: rgba(255, 255, 255, 0.95);
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     border-left: 6px solid #4A90E2;
+    height: 100%;
 }
 .analysis-title {
     font-size: 1.1rem;
     font-weight: bold;
     color: #2C3E50;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -121,38 +115,38 @@ st.markdown("""
 LOCATION_DATA = {
     "미국 (뉴욕)": {
         "city": "New York", "currency": "USD", "symbol": "$", 
-        "base_rate": 1350, "price_level": "약 140% (주거 및 외식비가 매우 높음)", 
-        "trade_tip": "주요 수출품: 자동차, 기계류. 통상 압박(IRA 등) 모니터링 필수. 비즈니스 미팅 시 결론부터 말하는 직설적인 화법을 선호합니다.",
-        "packing_tip": "전자기기 멀티탭(110V 전용), 편안한 운동화(도보 이동 많음), 일교차 대비 겉옷",
-        "must_visit": "센트럴 파크, 타임스퀘어, 브로드웨이 뮤지컬 관람, 메트로폴리탄 미술관"
+        "base_rate": 1350, "price_level": "약 140% (주거 및 외식비 높음)", 
+        "trade_tip": "주요 수출품: 자동차, 기계류. 통상 압박 모니터링 필수. 직설적인 화법 선호.",
+        "packing_tip": "멀티탭(110V), 편한 운동화, 일교차 겉옷",
+        "must_visit": "센트럴 파크, 타임스퀘어, 브로드웨이"
     },
     "독일 (베를린)": {
         "city": "Berlin", "currency": "EUR", "symbol": "€", 
-        "base_rate": 1450, "price_level": "약 110% (마트 장바구니 물가는 저렴하나, 서비스 요금이 높음)", 
-        "trade_tip": "주요 수출품: 배터리, 화학제품. CE 인증 등 환경/안전 규제가 매우 엄격합니다. 구두 약속보다 계약서와 문서 증빙을 극도로 중시합니다.",
-        "packing_tip": "EU 규격 멀티어댑터, 방수 바람막이(변덕스러운 날씨), 동전 지갑(현금 사용처 간혹 있음)",
-        "must_visit": "브란덴부르크 문, 베를린 장벽(이스트 사이드 갤러리), 박물관 섬"
+        "base_rate": 1450, "price_level": "약 110% (마트 물가는 저렴함)", 
+        "trade_tip": "주요 수출품: 배터리, 화학제품. 환경/안전 규제 엄격. 계약서 중시.",
+        "packing_tip": "EU 어댑터, 방수 바람막이, 동전 지갑",
+        "must_visit": "브란덴부르크 문, 베를린 장벽, 박물관 섬"
     },
     "일본 (도쿄)": {
         "city": "Tokyo", "currency": "JPY", "symbol": "¥", 
-        "base_rate": 900, "price_level": "약 90% (최근 엔저 현상으로 체감 물가가 한국보다 낮음)", 
-        "trade_tip": "주요 수출품: 철강, 전자부품. 품질 기준이 까다로우며 신뢰 구축에 오랜 시간이 걸립니다. 대면 미팅과 비즈니스 예절(명함 교환 등)이 매우 중요합니다.",
-        "packing_tip": "동전 지갑(동전 사용 빈도가 높음), 돼지코(110V), 편한 슬리퍼(숙소용)",
-        "must_visit": "시부야 스크램블, 센소지, 도쿄타워, 신주쿠교엔"
+        "base_rate": 900, "price_level": "약 90% (엔저로 체감 물가 낮음)", 
+        "trade_tip": "주요 수출품: 철강, 전자부품. 품질 기준 까다로움. 대면 미팅 및 예절 중시.",
+        "packing_tip": "동전 지갑, 돼지코(110V), 숙소용 슬리퍼",
+        "must_visit": "시부야 스크램블, 센소지, 도쿄타워"
     },
     "영국 (런던)": {
         "city": "London", "currency": "GBP", "symbol": "£", 
-        "base_rate": 1700, "price_level": "약 145% (교통비와 런던 내 주거비가 세계 최고 수준)", 
-        "trade_tip": "주요 수출품: 승용차, 바이오. 브렉시트(Brexit) 이후 독자적인 영국 인증(UKCA)을 도입했습니다. 간접적이고 우회적인 화법에 주의해야 합니다.",
-        "packing_tip": "BF타입 어댑터, 튼튼한 3단 우산(소나기 잦음), 교통카드(컨택리스 카드)",
-        "must_visit": "대영박물관, 런던 아이, 타워 브리지, 대회의실 및 빅벤"
+        "base_rate": 1700, "price_level": "약 145% (교통비/주거비 최고 수준)", 
+        "trade_tip": "주요 수출품: 승용차, 바이오. 독자 UKCA 인증 도입. 우회적 화법 주의.",
+        "packing_tip": "BF타입 어댑터, 튼튼한 3단 우산, 컨택리스 카드",
+        "must_visit": "대영박물관, 런던 아이, 타워 브리지"
     },
     "호주 (시드니)": {
         "city": "Sydney", "currency": "AUD", "symbol": "$", 
-        "base_rate": 880, "price_level": "약 130% (외식비, 인건비가 높아 전반적인 서비스 물가 높음)", 
-        "trade_tip": "주요 수출품: 석유제품, 자동차. 자원 강국이므로 원자재 수입 비중이 높습니다. 검역(목재, 식품 등)이 세계 최고 수준으로 까다로우니 주의하세요.",
-        "packing_tip": "O타입 어댑터, 강력한 자외선 차단제, 선글라스, 수영복",
-        "must_visit": "시드니 오페라 하우스, 하버브리지, 본다이 비치, 블루블루"
+        "base_rate": 880, "price_level": "약 130% (외식/인건비 높음)", 
+        "trade_tip": "주요 수출품: 석유제품, 자동차. 검역(목재·식품 등) 세계 최고 수준으로 엄격.",
+        "packing_tip": "O타입 어댑터, 자외선 차단제, 수영복",
+        "must_visit": "오페라 하우스, 하버브리지, 본다이 비치"
     }
 }
 
@@ -173,7 +167,7 @@ def get_exchange_rates(api_key):
         return response.json()
     return None
 
-# 6. 💡 좌우 여백을 넓혀서 셀렉트박스 길이를 자연스럽게 줄이고 중앙 배치
+# 6. 상단 선택기 중앙 배치 및 크기 조절
 col_space1, col_sel1, col_sel2, col_space2 = st.columns([2.0, 1.2, 1.2, 2.0])
 with col_sel1:
     purpose = st.selectbox("🎯 사용 용도", ["여행용 🎒", "무역 실무용 💼"])
@@ -270,7 +264,7 @@ with col2:
 """
             st.markdown(exchange_html, unsafe_allow_html=True)
 
-# ------------------ [맞춤형 정보 제공 (심층 분석)] ------------------
+# ------------------ [맞춤형 정보 제공 (4등분 가로 나란히 배치)] ------------------
 if w_data and e_data:
     st.markdown(f"### 📊 {purpose} 맞춤 심층 분석")
     
@@ -280,63 +274,83 @@ if w_data and e_data:
     if purpose == "여행용 🎒":
         weather_rec = "야외 활동을 하기에 쾌적하고 무난한 날씨입니다. 가벼운 발걸음으로 도시를 둘러보세요."
         if "비" in description or "눈" in description or "흐림" in description:
-            weather_rec = "기상 상태가 좋지 않거나 비/눈 소식이 있습니다. 야외 일정보다는 박물관, 미술관, 대형 쇼핑몰 등 **실내 위주의 일정**을 강력히 추천합니다!"
+            weather_rec = "기상 상태가 좋지 않거나 비/눈 소식이 있습니다. 야외 일정보다는 박물관, 미술관 등 **실내 위주의 일정**을 강력히 추천합니다!"
         elif temp > 28:
             weather_rec = "기온이 높아 다소 덥습니다. 한낮에는 무리한 야외 활동을 피하시고, 충분한 수분 섭취와 그늘 휴식이 필수입니다."
         elif temp < 5:
-            weather_rec = "날씨가 쌀쌀하거나 추우니 따뜻한 방한용품(목도리, 장갑, 패딩 등)을 꼭 챙기시고 실내 위주로 동선을 짜세요."
+            weather_rec = "날씨가 쌀쌀하거나 추우니 따뜻한 방한용품을 꼭 챙기시고 실내 위주로 동선을 짜세요."
             
         if compare_rate > base_rate * 1.02:
-            rate_rec = f"현재 환율({compare_rate:,.0f}원)이 기준선({base_rate}원)보다 높은 **원화 약세 구간**입니다. 현지 체류 시 예산이 초과되지 않도록 지출 관리에 조금 더 신경 쓰는 것이 좋습니다."
+            rate_rec = f"현재 환율({compare_rate:,.0f}원)이 기준선보다 높은 **원화 약세 구간**입니다. 현지 체류 시 예산 관리에 유의하세요."
         elif compare_rate < base_rate * 0.98:
-            rate_rec = f"현재 환율({compare_rate:,.0f}원)이 기준선({base_rate}원)보다 낮은 **원화 강세 구간**입니다. 환율 측면에서 매우 유리하므로 쇼핑이나 기념품 구매를 즐기기 딱 좋은 시기입니다!"
+            rate_rec = f"현재 환율({compare_rate:,.0f}원)이 기준선보다 낮은 **원화 강세 구간**입니다. 쇼핑과 기념품 구매를 즐기기 매우 좋은 시기입니다!"
         else:
-            rate_rec = f"현재 환율이 평년 수준을 안정적으로 유지하고 있어, 계획하셨던 여행 예산을 무리 없이 소화할 수 있습니다."
+            rate_rec = "현재 환율이 평년 수준을 유지하고 있어 계획하신 예산대로 안정적인 여행이 가능합니다."
 
-        st.markdown(f"""
-        <div class="analysis-container">
+        # 💡 여행용 4개 항목을 4등분(st.columns(4))으로 가로 나란히 배치
+        col_t1, col_t2, col_t3, col_t4 = st.columns(4)
+        
+        with col_t1:
+            st.markdown(f"""
             <div class="analysis-box" style="border-left-color: #3182CE;">
-                <div class="analysis-title">🌤️ 실시간 날씨 맞춤 가이드</div>
+                <div class="analysis-title">🌤️ 날씨 가이드</div>
                 <div class="analysis-content">{weather_rec}</div>
             </div>
+            """, unsafe_allow_html=True)
+            
+        with col_t2:
+            st.markdown(f"""
             <div class="analysis-box" style="border-left-color: #38A169;">
-                <div class="analysis-title">💵 환율 현황 및 예산 팁</div>
+                <div class="analysis-title">💵 환율 예산 팁</div>
                 <div class="analysis-content">{rate_rec}</div>
             </div>
+            """, unsafe_allow_html=True)
+            
+        with col_t3:
+            st.markdown(f"""
             <div class="analysis-box" style="border-left-color: #D69E2E;">
-                <div class="analysis-title">🛒 현지 물가 및 필수 준비물</div>
+                <div class="analysis-title">🛒 물가 및 준비물</div>
                 <div class="analysis-content">
-                    <b>• 한국 대비 물가:</b> {LOCATION_DATA[selected_option]['price_level']}<br>
-                    <b>• 추천 준비물:</b> {LOCATION_DATA[selected_option]['packing_tip']}
+                    <b>• 물가:</b> {LOCATION_DATA[selected_option]['price_level']}<br><br>
+                    <b>• 준비물:</b> {LOCATION_DATA[selected_option]['packing_tip']}
                 </div>
             </div>
+            """, unsafe_allow_html=True)
+            
+        with col_t4:
+            st.markdown(f"""
             <div class="analysis-box" style="border-left-color: #805AD5;">
-                <div class="analysis-title">📍 현지 추천 핫플레이스</div>
+                <div class="analysis-title">📍 추천 핫플레이스</div>
                 <div class="analysis-content">{LOCATION_DATA[selected_option]['must_visit']}</div>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
         
-    else: 
+    else: # 무역 실무용
         if compare_rate > base_rate * 1.02:
-            trade_rec = f"현재 환율({compare_rate:,.0f}원)이 기준선({base_rate}원)을 상회하는 <b>원화 약세장</b>입니다. <b>수출 기업</b>은 가격 경쟁력 확보 및 채산성 개선에 유리하며, <b>수입 기업</b>은 원가 부담이 커지므로 환헤지 및 계약 시점 조절이 필수적입니다."
+            trade_rec = f"현재 환율({compare_rate:,.0f}원)이 기준선 상회하는 <b>원화 약세장</b>입니다. <b>수출 기업</b>은 가격 경쟁력 확보에 유리하며, <b>수입 기업</b>은 원가 부담이 커져 환헤지 조절이 필수적입니다."
         elif compare_rate < base_rate * 0.98:
-            trade_rec = f"현재 환율({compare_rate:,.0f}원)이 기준선({base_rate}원)을 하회하는 <b>원화 강세장</b>입니다. <b>수입 기업</b>은 원자재나 부품 수입 단가를 낮추어 원가를 절감할 수 있으나, <b>수출 기업</b>은 가격 경쟁력 약화에 대비한 전략 점검이 필요합니다."
+            trade_rec = f"현재 환율({compare_rate:,.0f}원)이 기준선 하회하는 <b>원화 강세장</b>입니다. <b>수입 기업</b>은 원자재 단가를 낮출 수 있으나, <b>수출 기업</b>은 가격 경쟁력 약화에 대비한 전략 점검이 필요합니다."
         else:
-            trade_rec = "현재 환율이 안정적인 박스권 흐름을 보이고 있습니다. 환 리스크에 대한 부담이 적어 평소 기준에 맞춘 안정적인 대외 거래 진행이 가능합니다."
+            trade_rec = "현재 환율이 안정적인 박스권을 보이며 환 리스크 부담이 적어 평소 기준에 맞춘 안정적인 대외 거래가 가능합니다."
 
-        st.markdown(f"""
-        <div class="analysis-container">
+        # 💡 무역용 2개 항목을 2등분(st.columns(2))으로 가로 나란히 배치
+        col_m1, col_m2 = st.columns(2)
+        
+        with col_m1:
+            st.markdown(f"""
             <div class="analysis-box" style="border-left-color: #E53E3E;">
-                <div class="analysis-title">📈 실시간 환율 기반 수출입 전략</div>
+                <div class="analysis-title">📈 수출입 전략 가이드</div>
                 <div class="analysis-content">{trade_rec}</div>
             </div>
+            """, unsafe_allow_html=True)
+            
+        with col_m2:
+            st.markdown(f"""
             <div class="analysis-box" style="border-left-color: #DD6B20;">
-                <div class="analysis-title">💡 {country_name} 맞춤 무역 실무 및 비즈니스 팁</div>
+                <div class="analysis-title">💡 {country_name} 비즈니스 실무 팁</div>
                 <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_tip']}</div>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
 
 # ------------------ [하단: 스위칭 환전 계산기] ------------------
 st.markdown("---") 
