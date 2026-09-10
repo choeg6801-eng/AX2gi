@@ -111,67 +111,42 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 4. 지원 국가 데이터 (핫플레이스 이미지 URL 추가)
+# 4. 지원 국가 데이터
 LOCATION_DATA = {
     "미국 (뉴욕)": {
         "city": "New York", "currency": "USD", "symbol": "$", 
         "base_rate": 1350, "price_level": "약 140% (주거 및 외식비 높음)", 
         "trade_tip": "주요 수출품: 자동차, 기계류. 통상 압박 모니터링 필수. 직설적인 화법 선호.",
         "packing_tip": "멀티탭(110V), 편한 운동화, 일교차 겉옷",
-        "must_visit": "센트럴 파크, 타임스퀘어, 브로드웨이",
-        "images": [
-            "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=600&q=80"
-        ]
+        "must_visit": "센트럴 파크, 타임스퀘어, 브로드웨이"
     },
     "독일 (베를린)": {
         "city": "Berlin", "currency": "EUR", "symbol": "€", 
         "base_rate": 1450, "price_level": "약 110% (마트 물가는 저렴함)", 
         "trade_tip": "주요 수출품: 배터리, 화학제품. 환경/안전 규제 엄격. 계약서 중시.",
         "packing_tip": "EU 어댑터, 방수 바람막이, 동전 지갑",
-        "must_visit": "브란덴부르크 문, 베를린 장벽, 박물관 섬",
-        "images": [
-            "https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=600&q=80"
-        ]
+        "must_visit": "브란덴부르크 문, 베를린 장벽, 박물관 섬"
     },
     "일본 (도쿄)": {
         "city": "Tokyo", "currency": "JPY", "symbol": "¥", 
         "base_rate": 900, "price_level": "약 90% (엔저로 체감 물가 낮음)", 
         "trade_tip": "주요 수출품: 철강, 전자부품. 품질 기준 까다로움. 대면 미팅 및 예절 중시.",
         "packing_tip": "동전 지갑, 돼지코(110V), 숙소용 슬리퍼",
-        "must_visit": "시부야 스크램블, 센소지, 도쿄타워",
-        "images": [
-            "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?auto=format&fit=crop&w=600&q=80"
-        ]
+        "must_visit": "시부야 스크램블, 센소지, 도쿄타워"
     },
     "영국 (런던)": {
         "city": "London", "currency": "GBP", "symbol": "£", 
         "base_rate": 1700, "price_level": "약 145% (교통비/주거비 최고 수준)", 
         "trade_tip": "주요 수출품: 승용차, 바이오. 독자 UKCA 인증 도입. 우회적 화법 주의.",
         "packing_tip": "BF타입 어댑터, 튼튼한 3단 우산, 컨택리스 카드",
-        "must_visit": "대영박물관, 런던 아이, 타워 브리지",
-        "images": [
-            "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1526129318478-62ed807ebdf9?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1506579309014-c3a444a35413?auto=format&fit=crop&w=600&q=80"
-        ]
+        "must_visit": "대영박물관, 런던 아이, 타워 브리지"
     },
     "호주 (시드니)": {
         "city": "Sydney", "currency": "AUD", "symbol": "$", 
         "base_rate": 880, "price_level": "약 130% (외식/인건비 높음)", 
         "trade_tip": "주요 수출품: 석유제품, 자동차. 검역(목재·식품 등) 세계 최고 수준으로 엄격.",
         "packing_tip": "O타입 어댑터, 자외선 차단제, 수영복",
-        "must_visit": "오페라 하우스, 하버브리지, 본다이 비치",
-        "images": [
-            "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=600&q=80"
-        ]
+        "must_visit": "오페라 하우스, 하버브리지, 본다이 비치"
     }
 }
 
@@ -289,7 +264,7 @@ with col2:
 """
             st.markdown(exchange_html, unsafe_allow_html=True)
 
-# ------------------ [맞춤형 정보 제공 (4등분 가로 나란히 배치 & 사진 첨부)] ------------------
+# ------------------ [맞춤형 정보 제공 (4등분 가로 나란히 배치)] ------------------
 if w_data and e_data:
     st.markdown(f"### 📊 {purpose} 맞춤 심층 분석")
     
@@ -312,7 +287,7 @@ if w_data and e_data:
         else:
             rate_rec = "현재 환율이 평년 수준을 유지하고 있어 계획하신 예산대로 안정적인 여행이 가능합니다."
 
-        # 여행용 4개 항목을 4등분(st.columns(4))으로 가로 나란히 배치
+        # 💡 여행용 4개 항목을 4등분(st.columns(4))으로 가로 나란히 배치
         col_t1, col_t2, col_t3, col_t4 = st.columns(4)
         
         with col_t1:
@@ -349,16 +324,6 @@ if w_data and e_data:
                 <div class="analysis-content">{LOCATION_DATA[selected_option]['must_visit']}</div>
             </div>
             """, unsafe_allow_html=True)
-            
-        # 💡 핫플레이스 정보 밑에 사진들을 3등분으로 가로 나란히 첨부
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown(f"#### 📸 {country_name} 추천 핫플레이스 포토 갤러리")
-        img_cols = st.columns(3)
-        city_images = LOCATION_DATA[selected_option]["images"]
-        
-        for idx, col in enumerate(img_cols):
-            with col:
-                st.image(city_images[idx], use_container_width=True)
         
     else: # 무역 실무용
         if compare_rate > base_rate * 1.02:
@@ -368,6 +333,7 @@ if w_data and e_data:
         else:
             trade_rec = "현재 환율이 안정적인 박스권을 보이며 환 리스크 부담이 적어 평소 기준에 맞춘 안정적인 대외 거래가 가능합니다."
 
+        # 💡 무역용 2개 항목을 2등분(st.columns(2))으로 가로 나란히 배치
         col_m1, col_m2 = st.columns(2)
         
         with col_m1:
