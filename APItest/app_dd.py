@@ -37,7 +37,7 @@ st.markdown("""
     background-color: rgba(0,0,0,0);
 }
 
-/* 💡 목록바(셀렉트박스) 길이를 줄이고, 글자 크기를 키우며, 자몽색 테두리 적용 */
+/* 목록바(셀렉트박스) 길이를 줄이고, 글자 크기를 키우며, 자몽색 테두리 적용 */
 div[data-baseweb="select"] > div {
     border-color: #FF7F50 !important; /* 자몽색 (Coral) */
     border-width: 2px !important;
@@ -45,7 +45,7 @@ div[data-baseweb="select"] > div {
     min-height: 55px !important;
 }
 div[data-baseweb="select"] span {
-    font-size: 1.25rem !important; /* 글자 크기 키움 */
+    font-size: 1.25rem !important;
     font-weight: 600 !important;
 }
 
@@ -173,7 +173,7 @@ def get_exchange_rates(api_key):
         return response.json()
     return None
 
-# 6. 💡 상단 선택기를 중앙에 모으고 길이를 줄이기 위해 컬럼 비율을 [0.5, 1.5, 1.5, 0.5]로 조절
+# 6. 상단 선택기 중앙 배치 및 크기 조절
 col_space1, col_sel1, col_sel2, col_space2 = st.columns([0.8, 1.5, 1.5, 0.8])
 with col_sel1:
     purpose = st.selectbox("🎯 사용 용도", ["여행용 🎒", "무역 실무용 💼"])
@@ -336,8 +336,8 @@ if w_data and e_data:
                 <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_tip']}</div>
             </div>
         </div>
-        st.markdown(..., unsafe_allow_html5> # 5가 붙어 있어서 에러 발생
-        
+        """, unsafe_allow_html=True)
+
 # ------------------ [하단: 스위칭 환전 계산기] ------------------
 st.markdown("---") 
 
