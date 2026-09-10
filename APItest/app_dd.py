@@ -111,7 +111,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 4. 💡 스페인 및 남미 국가(브라질, 아르헨티나) 추가 완료된 전체 국가 데이터
+# 4. 지원 국가 데이터 (수출품, 수입품, 비즈니스 문화, 경제 상황 포함)
 LOCATION_DATA = {
     "미국 (뉴욕)": {
         "city": "New York", "currency": "USD", "symbol": "$", 
@@ -418,7 +418,7 @@ if w_data and e_data:
             with col:
                 st.image(city_images[idx], use_container_width=True)
         
-    else: # 무역 실무용 (수출/수입 분리 4분할 가로 나란히 배치)
+    else: # 무역 실무용 (수출/수입을 하나의 박스에 같이 넣고, 경제 상황 포함 4분할 가로 나란히 배치)
         if compare_rate > base_rate * 1.02:
             trade_rec = f"현재 환율({compare_rate:,.0f}원) 상회하는 <b>원화 약세장</b>: <b>수출 기업</b> 가격 경쟁력 확보 유리, <b>수입 기업</b> 원가 부담 증가로 환헤지 필수."
         elif compare_rate < base_rate * 0.98:
@@ -431,16 +431,19 @@ if w_data and e_data:
         with col_m1:
             st.markdown(f"""
             <div class="analysis-box" style="border-left-color: #DD6B20;">
-                <div class="analysis-title">📤 주요 수출품</div>
-                <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_export']}</div>
+                <div class="analysis-title">📦 주요 수출/수입품</div>
+                <div class="analysis-content">
+                    <b>• 주요 수출품:</b><br>{LOCATION_DATA[selected_option]['trade_export']}<br><br>
+                    <b>• 주요 수입품:</b><br>{LOCATION_DATA[selected_option]['trade_import']}
+                </div>
             </div>
             """, unsafe_allow_html=True)
             
         with col_m2:
             st.markdown(f"""
             <div class="analysis-box" style="border-left-color: #3182CE;">
-                <div class="analysis-title">📥 주요 수입품</div>
-                <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_import']}</div>
+                <div class="analysis-title">📊 현재 경제 상황</div>
+                <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_economy']}</div>
             </div>
             """, unsafe_allow_html=True)
             
@@ -475,7 +478,7 @@ if e_data and e_data.get("result") == "success":
             input_amount = st.number_input(f"환전할 {country_name} 금액({target_currency})을 입력하세요:", min_value=0.0, value=100.0, step=10.0)
             krw_result = input_amount * target_to_krw
             st.success(f"예상 환전 금액: **{krw_result:,.0f} 원(KRW)**")
-        else:
+        else: 
             input_amount = st.number_input(f"환전할 원화(KRW) 금액을 입력하세요:", min_value=0.0, value=100000.0, step=10000.0)
             target_result = input_amount / target_to_krw
             st.success(f"예상 환전 금액: **{currency_symbol} {target_result:,.2f}** ({target_currency})")
