@@ -111,17 +111,17 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 4. 지원 국가 데이터 (여행용 치안 정보 추가 완료)
+# 4. 지원 국가 데이터 (기존 국가 + 한국 의료기기/제약 주요 수출 상위 국가들 추가 완료)
 LOCATION_DATA = {
     "미국 (뉴욕)": {
         "city": "New York", "currency": "USD", "symbol": "$", 
         "base_rate": 1350, "price_level": "약 140% (주거 및 외식비 높음)", 
-        "trade_export": "자동차, 반도체, 기계류, 석유제품",
+        "trade_export": "자동차, 반도체, 의료기기, 의약품",
         "trade_import": "원유, 천연가스, 항공기, 농산물",
         "trade_culture": "결론 우선 직설적 화법 선호, 계약서 상의 문서 증빙과 준법 정신을 극도로 중시",
         "trade_economy": "견조한 소비 중심 성장이나 고금리 장기화로 인한 자금 조달 비용 부담 존재",
         "packing_tip": "멀티탭(110V), 편한 운동화, 일교차 겉옷",
-        "safety_info": "전반적으로 안전하나 심야 시간대의 지하철역이나 우범 지역(할렘가 일부 등)은 단독 통행을 피하고 소매치기 주의",
+        "safety_info": "전반적으로 안전하나 심야 시간대의 지하철역이나 우범 지역은 단독 통행을 피하고 소매치기 주의",
         "must_visit": "센트럴 파크, 타임스퀘어, 브로드웨이",
         "images": [
             "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=600&q=80",
@@ -129,15 +129,111 @@ LOCATION_DATA = {
             "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=600&q=80"
         ]
     },
+    "중국 (베이징)": {
+        "city": "Beijing", "currency": "CNY", "symbol": "¥", 
+        "base_rate": 190, "price_level": "약 80% (한국 대비 전반적인 물가가 낮음)", 
+        "trade_export": "반도체, 디스플레이, 정밀화학제품, 의료기기",
+        "trade_import": "희토류, 배터리 원료, 기계류, 농수산물",
+        "trade_culture": "인간관계와 체면(시엔즈)을 중요시하며, 만찬과 비공식 대화를 통한 신뢰 구축이 필수적임",
+        "trade_economy": "내수 회복 속도가 다소 완만하나 첨단 산업 및 의료·바이오 분야의 국산화 및 수입 수요 공존",
+        "packing_tip": "중국용 멀티어댑터, 비상용 상비약, 스마트폰 번역 앱 필수",
+        "safety_info": "전반적인 치안은 우수하나 인파가 몰리는 곳이나 관광지에서 소매치기 주의",
+        "must_visit": "자금성, 만리장성, 천안문 광장",
+        "images": [
+            "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1543785734-4b6e564642f8?auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    "베트남 (하노이)": {
+        "city": "Hanoi", "currency": "VND", "symbol": "₫", 
+        "base_rate": 0.055, "price_level": "약 50% (외식비와 물가가 매우 저렴함)", 
+        "trade_export": "무선통신기기, 반도체, 의료용 소모품, 의약품",
+        "trade_import": "농산물, 의류 원단, 목재, 수산물",
+        "trade_culture": "상호 존중과 예를 갖추는 태도를 좋아하며, 연장자나 직급이 높은 사람을 예우함",
+        "trade_economy": "외국인 투자 유치 확대로 경제 성장세가 매우 가파르며 보건의료 인프라 개선 수요 급증",
+        "packing_tip": "우비 또는 우산(스콜 대비), 모기 기피제, 가벼운 옷차림",
+        "safety_info": "오토바이 날치기(스마트폰, 가방)가 빈번하므로 길거리에서 소지품 노출 주의",
+        "must_visit": "하롱베이(인근), 호안끼엠 호수, 응옥썬 사당",
+        "images": [
+            "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1528164344705-475426879c0d?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1548711621-16d7a4659f1e?auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    "프랑스 (파리)": {
+        "city": "Paris", "currency": "EUR", "symbol": "€", 
+        "base_rate": 1450, "price_level": "약 130% (외식비와 숙박비가 높은 편)", 
+        "trade_export": "화장품, 의약품, 항공기 부품, 의료기기",
+        "trade_import": "와인, 치즈, 항공기, 의약품 원료",
+        "trade_culture": "프랑스어 사용을 선호하는 경향이 있으며 격식과 논리적인 토론을 중시",
+        "trade_economy": "유럽 내 핵심 제약·바이오 및 헬스케어 시장으로 공공 의료 부문 수입 비중 큼",
+        "packing_tip": "EU 규격 어댑터, 우아한 외투, 편안한 워킹화",
+        "safety_info": "지하철 및 관광 명소 주변에서 기승을 부리는 소매치기와 사기단(설문지 사기 등) 각별히 주의",
+        "must_visit": "에펠탑, 루브르 박물관, 개선문",
+        "images": [
+            "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1520939817895-060bdaf4fe1b?auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    "러시아 (모스크바)": {
+        "city": "Moscow", "currency": "RUB", "symbol": "₽", 
+        "base_rate": 15, "price_level": "약 60% (수입품 제외 전반적인 현지 물가는 저렴함)", 
+        "trade_export": "자동차, 자동차 부품, 의료기기, 의약품",
+        "trade_import": "원유, 천연가스, 석탄, 비철금속",
+        "trade_culture": "초기 미팅에는 거칠고 엄숙해 보일 수 있으나 신뢰가 쌓이면 매우 호의적으로 변함",
+        "trade_economy": "서방 제재 이후 공급망 다변화 속에서 보건의료 및 의약품 자립화 추진 중",
+        "packing_tip": "방한용품(겨울철 혹한 대비), C/F 타입 멀티어댑터",
+        "safety_info": "치안은 안정된 편이나 외국인 대상 불심검문이나 다중 밀집 시설 방문 시 주의 필요",
+        "must_visit": "붉은 광장, 크렘린 궁전, 성 바실리 대성당",
+        "images": [
+            "https://images.unsplash.com/photo-1513326738677-b964603b146d?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1520106219491-a13636454e95?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1547448415-e9f5b28e570d?auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    "튀르키예 (이스탄불)": {
+        "city": "Istanbul", "currency": "TRY", "symbol": "₺", 
+        "base_rate": 40, "price_level": "약 55% (환율 변동성으로 체감 물가가 수시로 바뀜)", 
+        "trade_export": "철강, 기계류, 자동차 부품, 의료기기",
+        "trade_import": "광물, 화학제품, 농산물, 철강 원자재",
+        "trade_culture": "인간적 교감과 친분을 쌓는 것을 중요시하며 식사 대화나 티타임을 선호",
+        "trade_economy": "유럽과 아시아를 잇는 물류 요충지이며 의료 관광 및 헬스케어 인프라 투자 활발",
+        "packing_tip": "C/F 타입 어댑터, 모스크 방문용 가벼운 스카프/복장",
+        "safety_info": "군중 밀집 지역 및 번화가에서 소매치기 및 바가지 요금 상인 주의",
+        "must_visit": "블루 모스크, 하기아 소피아, 그랜드 바자르",
+        "images": [
+            "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1543785734-4b6e564642f8?auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    "브라질 (상파울루)": {
+        "city": "Sao Paulo", "currency": "BRL", "symbol": "R$", 
+        "base_rate": 270, "price_level": "약 75% (공산품은 비싸지만 현지 식품 물가는 저렴함)", 
+        "trade_export": "철강, 자동차 부품, 의료기기, 의약품",
+        "trade_import": "대두, 철광석, 원유, 육류(소고기/가금류), 커피",
+        "trade_culture": "따뜻하고 정중한 인사와 악수를 중시하며, 서두르지 않는 여유로운 비즈니스 스타일",
+        "trade_economy": "자원 및 농축산물 수출 대국이나 높은 인플레이션과 환율 변동성에 주의 필요",
+        "packing_tip": "변압기(대부분 110V/220V 혼용이나 확인 필요), 소매치기 방지 백팩, 모기 기피제",
+        "safety_info": "강도 및 날치기 위험이 높은 지역이 많으므로 고가 스마트폰 노출 금지 및 야간 단독 외출 절대 자제",
+        "must_visit": "파울리스타 대로, 이비라푸에라 공장, 상파울루 미술관",
+        "images": [
+            "https://images.unsplash.com/photo-1531737704602-44287528e1a1?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1512813266185-3b1f5fc23015?auto=format&fit=crop&w=600&q=80"
+        ]
+    },
     "멕시코 (멕시코시티)": {
         "city": "Mexico City", "currency": "MXN", "symbol": "$", 
         "base_rate": 80, "price_level": "약 70% (현지 물가와 식비가 비교적 저렴함)", 
-        "trade_export": "자동차, 전자부품, 철강, 의료기기",
+        "trade_export": "자동차, 전자부품, 의료기기, 의약품",
         "trade_import": "원유, 정밀기기, 화학공업제품, 농축산물",
         "trade_culture": "개인적인 신뢰와 유대감(파네르소)을 중시하며, 악수와 인사를 나누는 정중한 태도 필요",
         "trade_economy": "미국 인접 효과(니어쇼어링)로 제조업 및 의료기기·제약 분야 투자가 급증하는 유망 시장",
         "packing_tip": "고고도 대비 자외선 차단제, 가벼운 외투(일교차 큼), 멀티어댑터",
-        "safety_info": "치안 주의 지역으로, 공식 택시(디시오) 이용 필수 및 야간 인적이 드문 장소나 대중교통 이용 시 각별한 주의 요망",
+        "safety_info": "치안 주의 지역으로, 공식 택시 이용 필수 및 야간 인적이 드문 장소나 대중교통 이용 시 각별한 주의 요망",
         "must_visit": "소칼로 광장, 차풀테페크 공장, 프리다 칼로 미술관",
         "images": [
             "https://images.unsplash.com/photo-1512813266185-3b1f5fc23015?auto=format&fit=crop&w=600&q=80",
@@ -145,58 +241,58 @@ LOCATION_DATA = {
             "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=600&q=80"
         ]
     },
-    "콜롬비아 (보고타)": {
-        "city": "Bogota", "currency": "COP", "symbol": "$", 
-        "base_rate": 0.35, "price_level": "약 65% (의료기기 및 제약 공공 조달 수요 높음)", 
-        "trade_export": "자동차 부품, 석유화학제품, 철강, 기계류",
-        "trade_import": "의료기기, 의약품, 정밀화학, 방송통신기기",
-        "trade_culture": "격식 있는 호칭과 정중한 태도를 중시하며, 직접적인 거절보다는 우회적인 표현 사용",
-        "trade_economy": "중남미 내 대표적인 보건의료 허브로 제약 및 첨단 의료기기 수입 수요가 매우 활발함",
-        "packing_tip": "고산지대 대비 우산(소나기 잦음), 따뜻한 겉옷(선선한 날씨)",
-        "safety_info": "소매치기 및 날치기 범죄가 빈번하므로 고가품(귀금속, 스마트폰) 노출을 자제하고 안전한 구역 위주로 이동 권장",
-        "must_visit": "몬세라테 언덕, 황금 박물관, 볼리바르 광장",
+    "독일 (베를린)": {
+        "city": "Berlin", "currency": "EUR", "symbol": "€", 
+        "base_rate": 1450, "price_level": "약 110% (마트 물가는 저렴함)", 
+        "trade_export": "자동차부품, 배터리, 화학제품, 의료기기",
+        "trade_import": "천연가스, 의약품, 전자제품, 원유",
+        "trade_culture": "엄격한 규정과 절차 준수, 공사 구분 명확, 철저한 사전 서면 검토 요구",
+        "trade_economy": "제조업 부진 및 에너지 전환 비용 증가로 인해 완만한 성장 정체 국면",
+        "packing_tip": "EU 어댑터, 방수 바람막이, 동전 지갑",
+        "safety_info": "치안 상태가 매우 안전하나 베를린 등 대도시 기차역 주변이나 야간 번화가에서는 소지품 주의",
+        "must_visit": "브란덴부르크 문, 베를린 장벽, 박물관 섬",
         "images": [
-            "https://images.unsplash.com/photo-1589909202874-17f975762af0?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1583321500900-82807e45c03e?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1531737704602-44287528e1a1?auto=format&fit=crop&w=600&q=80"
+            "https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=600&q=80"
         ]
     },
-    "칠레 (산티아고)": {
-        "city": "Santiago", "currency": "CLP", "symbol": "$", 
-        "base_rate": 1.4, "price_level": "약 80% (남미에서 경제적 안정성과 투명성이 높은 국가)", 
-        "trade_export": "자동차, 기계류, 석유제품, 철강",
-        "trade_import": "의료기기, 의약품, 광산용 장비, IT 기기",
-        "trade_culture": "시간 약속을 철저히 지키며 비즈니스 매너가 매우 서구적이고 투명함",
-        "trade_economy": "공공 및 민간 병원 인프라 현대화로 첨단 의료기기 및 제약 분야 수입 의존도가 높음",
-        "packing_tip": "자외선 차단제, 선글라스, 건조한 날씨 대비 보습 용품",
-        "safety_info": "남미 국가 중 비교적 치안이 안정적이나 관광지 및 지하철 내 소매치기, 차량털이 범죄에 주의 필요",
-        "must_visit": "산타 루시아 언덕, 아라스 광장,스카이 코스타네라",
+    "일본 (도쿄)": {
+        "city": "Tokyo", "currency": "JPY", "symbol": "¥", 
+        "base_rate": 900, "price_level": "약 90% (엔저로 체감 물가 낮음)", 
+        "trade_export": "철강, 반도체 장비, 의료기기, 의약품",
+        "trade_import": "액화천연가스(LNG), 원유, 의류, 식료품",
+        "trade_culture": "격식 있는 호칭과 철저한 비즈니스 예절(명함 교환 등), 신뢰 구축 중시",
+        "trade_economy": "완만한 임금 상승과 관광객 유입으로 내수 회복세이나 엔화 변동성 주의",
+        "packing_tip": "동전 지갑, 돼지코(110V), 숙소용 슬리퍼",
+        "safety_info": "세계에서 가장 치안이 안전한 국가 중 하나로 밤늦은 귀가도 안전함 (가끔 지진 발생 대비 필요)",
+        "must_visit": "시부야 스크램블, 센소지, 도쿄타워",
         "images": [
-            "https://images.unsplash.com/photo-1512813266185-3b1f5fc23015?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=600&q=80"
+            "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?auto=format&fit=crop&w=600&q=80"
         ]
     },
-    "오스트리아 (비엔나)": {
-        "city": "Vienna", "currency": "EUR", "symbol": "€", 
-        "base_rate": 1450, "price_level": "약 115% (서유럽 평균 수준의 높은 삶의 질과 물가)", 
-        "trade_export": "기계, 자동차 부품, 철강, 전기기기",
-        "trade_import": "의약품, 의료기기, 정밀기계, 에너지",
-        "trade_culture": "공식 직함과 학위를 중요하게 여기며, 철저한 서면 계약과 격식 있는 태도 요구",
-        "trade_economy": "중동부 유럽을 잇는 비즈니스 거점이며 안정적인 제조업과 제약·의료 산업 인프라 보유",
-        "packing_tip": "EU 규격 어댑터, 클래식 공연 관람용 단정한 옷차림, 편한 걷기용 신발",
-        "safety_info": "세계에서 가장 안전한 도시 중 하나로 꼽히나 주요 관광지 주변 소매치기만 주의하면 안전함",
-        "must_visit": "벨베데레 궁전, 쇤브룬 궁전, 비엔나 국립 오페라극장",
+    "영국 (런던)": {
+        "city": "London", "currency": "GBP", "symbol": "£", 
+        "base_rate": 1700, "price_level": "약 145% (교통비/주거비 최고 수준)", 
+        "trade_export": "승용차, 의약품, 바이오, 의료기기",
+        "trade_import": "원유, 천연가스, 기계장치, 귀금속",
+        "trade_culture": "우회적이고 정중한 화법 사용, 비즈니스 네트워킹과 신용도 매우 중시",
+        "trade_economy": "서비스 산업 중심의 경제이나 고금리 및 브렉시트 여파로 성장 둔화 압력",
+        "packing_tip": "BF타입 어댑터, 튼튼한 3단 우산, 컨택리스 카드",
+        "safety_info": "치안은 비교적 안전하나 번화가나 지하철 내에서 오토바이 날치기나 소매치기 범죄 조심",
+        "must_visit": "대영박물관, 런던 아이, 타워 브리지",
         "images": [
-            "https://images.unsplash.com/photo-1516550893885-303cefc47b36?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1543785734-4b6e564642f8?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=600&q=80"
+            "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1526129318478-62ed807ebdf9?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1506579309014-c3a444a35413?auto=format&fit=crop&w=600&q=80"
         ]
     },
     "스위스 (취리히)": {
         "city": "Zurich", "currency": "CHF", "symbol": "CHF", 
         "base_rate": 1500, "price_level": "약 160% (세계 최고 수준의 외식비 및 물가)", 
-        "trade_export": "정밀기기, 의약품, 기계, 시계",
+        "trade_export": "정밀기기, 의약품, 바이오, 의료기기",
         "trade_import": "귀금속, 의약품 원료, 첨단 의료기기, 화학제품",
         "trade_culture": "시간 엄수가 절대적이며 정확성, 신뢰성, 철저한 문서 기록을 극도로 중시",
         "trade_economy": "제약 및 바이오, 정밀 의료기기 산업의 세계적 중심지로 강력한 경제력을 자랑함",
@@ -212,7 +308,7 @@ LOCATION_DATA = {
     "네덜란드 (암스테르담)": {
         "city": "Amsterdam", "currency": "EUR", "symbol": "€", 
         "base_rate": 1450, "price_level": "약 120% (주거비와 서비스 물가가 높은 편)", 
-        "trade_export": "반도체 장비, 기계, 화학제품, 원예 농산물",
+        "trade_export": "반도체 장비, 의약품, 바이오, 의료기기",
         "trade_import": "전자제품, 원유, 의료기기, 의약품",
         "trade_culture": "매우 직설적이고 실용적인 화법을 구사하며 회의에서 빠른 결론과 효율성 추구",
         "trade_economy": "유럽의 물류·유통 허브이며 ASML 등 첨단 반도체 및 의료 기술 인프라가 매우 발달함",
@@ -233,7 +329,7 @@ LOCATION_DATA = {
         "trade_culture": "인간관계를 중요하게 생각하며 공식 미팅 전 가벼운 스몰토크와 친밀감 형성이 유리함",
         "trade_economy": "관광업 회복과 더불어 공공 보건 의료 부문의 의료기기 현대화 사업이 꾸준히 진행 중",
         "packing_tip": "소매치기 방지 백팩, 유적지 관람용 편한 운동화, 선글라스",
-        "safety_info": "관광객을 노린 소매치기, 날치기 및 사기꾼(팔찌 강매 등)이 매우 많으므로 소지품 관리에 각별한 주의 필요",
+        "safety_info": "관광객을 노린 소매치기, 날치기 및 사기꾼이 매우 많으므로 소지품 관리에 각별한 주의 필요",
         "must_visit": "콜로세움, 트레비 분수, 바티칸 시국",
         "images": [
             "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=600&q=80",
@@ -241,74 +337,74 @@ LOCATION_DATA = {
             "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=600&q=80"
         ]
     },
-    "영국 (런던)": {
-        "city": "London", "currency": "GBP", "symbol": "£", 
-        "base_rate": 1700, "price_level": "약 145% (교통비/주거비 최고 수준)", 
-        "trade_export": "승용차, 의약품, 바이오, 기계류",
-        "trade_import": "원유, 천연가스, 기계장치, 귀금속",
-        "trade_culture": "우회적이고 정중한 화법 사용, 비즈니스 네트워킹과 신용도 매우 중시",
-        "trade_economy": "서비스 산업 중심의 경제이나 고금리 및 브렉시트 여파로 성장 둔화 압력",
-        "packing_tip": "BF타입 어댑터, 튼튼한 3단 우산, 컨택리스 카드",
-        "safety_info": "치안은 비교적 안전하나 번화가나 지하철 내에서 오토바이 날치기나 소매치기 범죄 조심",
-        "must_visit": "대영박물관, 런던 아이, 타워 브리지",
+    "오스트리아 (비엔나)": {
+        "city": "Vienna", "currency": "EUR", "symbol": "€", 
+        "base_rate": 1450, "price_level": "약 115% (서유럽 평균 수준의 높은 삶의 질과 물가)", 
+        "trade_export": "기계, 자동차 부품, 철강, 의료기기",
+        "trade_import": "의약품, 의료기기, 정밀기계, 에너지",
+        "trade_culture": "공식 직함과 학위를 중요하게 여기며, 철저한 서면 계약과 격식 있는 태도 요구",
+        "trade_economy": "중동부 유럽을 잇는 비즈니스 거점이며 안정적인 제조업과 제약·의료 산업 인프라 보유",
+        "packing_tip": "EU 규격 어댑터, 클래식 공연 관람용 단정한 옷차림, 편한 걷기용 신발",
+        "safety_info": "세계에서 가장 안전한 도시 중 하나로 꼽히나 주요 관광지 주변 소매치기만 주의하면 안전함",
+        "must_visit": "벨베데레 궁전, 쇤브룬 궁전, 비엔나 국립 오페라극장",
         "images": [
-            "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1526129318478-62ed807ebdf9?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1506579309014-c3a444a35413?auto=format&fit=crop&w=600&q=80"
+            "https://images.unsplash.com/photo-1516550893885-303cefc47b36?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1543785734-4b6e564642f8?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=600&q=80"
         ]
     },
-    "포르투갈 (리스본)": {
-        "city": "Lisbon", "currency": "EUR", "symbol": "€", 
-        "base_rate": 1450, "price_level": "약 75% (서유럽 국가 중 물가와 식비가 가장 저렴한 편)", 
-        "trade_export": "기계, 자동차 부품, 와인/농산물, 섬유",
-        "trade_import": "화학제품, 기계류, 석유제품, 의료기기",
-        "trade_culture": "예의를 갖추고 친근하며, 여유롭고 완만한 속도의 비즈니스 진행 선호",
-        "trade_economy": "스타트업 및 IT 허브로 급부상 중이며 관광 및 헬스케어 인프라 투자 확대 추세",
-        "packing_tip": "편한 운동화(언덕과 돌길이 많음), 선글라스, 가벼운 외투",
-        "safety_info": "유럽에서 손꼽힐 정도로 치안이 안전한 편이나 트램 안이나 밀집된 관광지에서 소매치기 주의",
-        "must_visit": "제이루무 수도원, 벨렘탑, 코메르시우 광장",
+    "콜롬비아 (보고타)": {
+        "city": "Bogota", "currency": "COP", "symbol": "$", 
+        "base_rate": 0.35, "price_level": "약 65% (의료기기 및 제약 공공 조달 수요 높음)", 
+        "trade_export": "자동차 부품, 석유화학제품, 의료기기, 의약품",
+        "trade_import": "의료기기, 의약품, 정밀화학, 방송통신기기",
+        "trade_culture": "격식 있는 호칭과 정중한 태도를 중시하며, 직접적인 거절보다는 우회적인 표현 사용",
+        "trade_economy": "중남미 내 대표적인 보건의료 허브로 제약 및 첨단 의료기기 수입 수요가 매우 활발함",
+        "packing_tip": "고산지대 대비 우산(소나기 잦음), 따뜻한 겉옷(선선한 날씨)",
+        "safety_info": "소매치기 및 날치기 범죄가 빈번하므로 고가품 노출을 자제하고 안전한 구역 위주로 이동 권장",
+        "must_visit": "몬세라테 언덕, 황금 박물관, 볼리바르 광장",
         "images": [
-            "https://images.unsplash.com/photo-1585208798174-6ed3c4041a04?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1513603175902-3f7d1b54f494?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1548711621-16d7a4659f1e?auto=format&fit=crop&w=600&q=80"
+            "https://images.unsplash.com/photo-1589909202874-17f975762af0?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1583321500900-82807e45c03e?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1531737704602-44287528e1a1?auto=format&fit=crop&w=600&q=80"
         ]
     },
-    "독일 (베를린)": {
-        "city": "Berlin", "currency": "EUR", "symbol": "€", 
-        "base_rate": 1450, "price_level": "약 110% (마트 물가는 저렴함)", 
-        "trade_export": "자동차부품, 배터리, 화학제품, 기계",
-        "trade_import": "천연가스, 의약품, 전자제품, 원유",
-        "trade_culture": "엄격한 규정과 절차 준수, 공사 구분 명확, 철저한 사전 서면 검토 요구",
-        "trade_economy": "제조업 부진 및 에너지 전환 비용 증가로 인해 완만한 성장 정체 국면",
-        "packing_tip": "EU 어댑터, 방수 바람막이, 동전 지갑",
-        "safety_info": "치안 상태가 매우 안전하나 베를린 등 대도시 기차역 주변이나 야간 번화가에서는 소지품 주의",
-        "must_visit": "브란덴부르크 문, 베를린 장벽, 박물관 섬",
+    "칠레 (산티아고)": {
+        "city": "Santiago", "currency": "CLP", "symbol": "$", 
+        "base_rate": 1.4, "price_level": "약 80% (남미에서 경제적 안정성과 투명성이 높은 국가)", 
+        "trade_export": "자동차, 기계류, 의료기기, 의약품",
+        "trade_import": "의료기기, 의약품, 광산용 장비, IT 기기",
+        "trade_culture": "시간 약속을 철저히 지키며 비즈니스 매너가 매우 서구적이고 투명함",
+        "trade_economy": "공공 및 민간 병원 인프라 현대화로 첨단 의료기기 및 제약 분야 수입 의존도가 높음",
+        "packing_tip": "자외선 차단제, 선글라스, 건조한 날씨 대비 보습 용품",
+        "safety_info": "남미 국가 중 비교적 치안이 안정적이나 관광지 및 지하철 내 소매치기, 차량털이 범죄에 주의 필요",
+        "must_visit": "산타 루시아 언덕, 아라스 광장,스카이 코스타네라",
         "images": [
-            "https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=600&q=80"
+            "https://images.unsplash.com/photo-1512813266185-3b1f5fc23015?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=600&q=80"
         ]
     },
-    "일본 (도쿄)": {
-        "city": "Tokyo", "currency": "JPY", "symbol": "¥", 
-        "base_rate": 900, "price_level": "약 90% (엔저로 체감 물가 낮음)", 
-        "trade_export": "철강, 반도체 장비, 전자부품, 자동차",
-        "trade_import": "액화천연가스(LNG), 원유, 의류, 식료품",
-        "trade_culture": "격식 있는 호칭과 철저한 비즈니스 예절(명함 교환 등), 신뢰 구축 중시",
-        "trade_economy": "완만한 임금 상승과 관광객 유입으로 내수 회복세이나 엔화 변동성 주의",
-        "packing_tip": "동전 지갑, 돼지코(110V), 숙소용 슬리퍼",
-        "safety_info": "세계에서 가장 치안이 안전한 국가 중 하나로 밤늦은 귀가도 안전함 (가끔 지진 발생 대비 필요)",
-        "must_visit": "시부야 스크램블, 센소지, 도쿄타워",
+    "아르헨티나 (부에노스아이레스)": {
+        "city": "Buenos Aires", "currency": "ARS", "symbol": "$", 
+        "base_rate": 1.5, "price_level": "약 60% (외국인 환율 체감상 물가가 매우 저렴하게 느껴짐)", 
+        "trade_export": "기계류, 자동차 부품, 화학제품, 의료기기",
+        "trade_import": "곡물(대두/밀), 육류, 리튬, 의료기기",
+        "trade_culture": "친근한 스킨십과 대화를 선호하며, 개인적인 유대감을 쌓은 뒤 거래 진행",
+        "trade_economy": "만성적인 고인플레이션과 복잡한 외환 규제가 존재하므로 대금 결제 조건 리스크 관리 필수",
+        "packing_tip": "C/I 타입 겸용 어댑터, 넉넉한 현금(달러 선호), 편한 산책화",
+        "safety_info": "오토바이 소매치기 및 날치기가 빈번하므로 길거리에서 스마트폰을 꺼내 들고 통화하는 행위 주의",
+        "must_visit": "라보카(캄니토), 5월 광장, 오벨리스크",
         "images": [
-            "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?auto=format&fit=crop&w=600&q=80"
+            "https://images.unsplash.com/photo-1589909202874-17f975762af0?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1612294037637-ec32374e2846?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1583321500900-82807e45c03e?auto=format&fit=crop&w=600&q=80"
         ]
     },
     "호주 (시드니)": {
         "city": "Sydney", "currency": "AUD", "symbol": "$", 
         "base_rate": 880, "price_level": "약 130% (외식/인건비 높음)", 
-        "trade_export": "석유제품, 자동차, 기계, 정밀기기",
+        "trade_export": "석유제품, 자동차, 기계, 의료기기",
         "trade_import": "철광석, 석탄, 천연가스, 여행·교육 서비스",
         "trade_culture": "워라밸을 중시하며 수평적이고 실용적인 커뮤니케이션 선호",
         "trade_economy": "자원 수출 호조를 보이고 있으나 높은 인플레이션과 금리 압박 존재",
@@ -319,38 +415,6 @@ LOCATION_DATA = {
             "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=600&q=80",
             "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=600&q=80",
             "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=600&q=80"
-        ]
-    },
-    "브라질 (상파울루)": {
-        "city": "Sao Paulo", "currency": "BRL", "symbol": "R$", 
-        "base_rate": 270, "price_level": "약 75% (공산품은 비싸지만 현지 식품 물가는 저렴함)", 
-        "trade_export": "철강, 자동차 부품, 화학제품, 전자제품",
-        "trade_import": "대두, 철광석, 원유, 육류(소고기/가금류), 커피",
-        "trade_culture": "따뜻하고 정중한 인사와 악수를 중시하며, 서두르지 않는 여유로운 비즈니스 스타일",
-        "trade_economy": "자원 및 농축산물 수출 대국이나 높은 인플레이션과 환율 변동성에 주의 필요",
-        "packing_tip": "변압기(대부분 110V/220V 혼용이나 확인 필요), 소매치기 방지 백팩, 모기 기피제",
-        "safety_info": "강도 및 날치기 위험이 높은 지역이 많으므로 고가 스마트폰 노출 금지 및 야간 단독 외출 절대 자제",
-        "must_visit": "파울리스타 대로, 이비라푸에라 공장, 상파울루 미술관",
-        "images": [
-            "https://images.unsplash.com/photo-1531737704602-44287528e1a1?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1512813266185-3b1f5fc23015?auto=format&fit=crop&w=600&q=80"
-        ]
-    },
-    "아르헨티나 (부에노스아이레스)": {
-        "city": "Buenos Aires", "currency": "ARS", "symbol": "$", 
-        "base_rate": 1.5, "price_level": "약 60% (외국인 환율 체감상 물가가 매우 저렴하게 느껴짐)", 
-        "trade_export": "기계류, 자동차 부품, 화학제품, 플라스틱",
-        "trade_import": "곡물(대두/밀), 육류, 리튬, 원유 및 가스",
-        "trade_culture": "친근한 스킨십(볼 키스 등)과 대화를 선호하며, 개인적인 유대감을 쌓은 뒤 거래 진행",
-        "trade_economy": "만성적인 고인플레이션과 복잡한 외환 규제가 존재하므로 대금 결제 조건 리스크 관리 필수",
-        "packing_tip": "C/I 타입 겸용 어댑터, 넉넉한 현금(달러 선호), 편한 산책화",
-        "safety_info": "오토바이 소매치기 및 날치기가 빈번하므로 길거리에서 스마트폰을 꺼내 들고 통화하는 행위 주의",
-        "must_visit": "라보카(캄니토), 5월 광장, 오벨리스크",
-        "images": [
-            "https://images.unsplash.com/photo-1589909202874-17f975762af0?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1612294037637-ec32374e2846?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1583321500900-82807e45c03e?auto=format&fit=crop&w=600&q=80"
         ]
     }
 }
@@ -469,7 +533,7 @@ with col2:
 """
             st.markdown(exchange_html, unsafe_allow_html=True)
 
-# ------------------ [맞춤형 정보 제공 (치안 상황 추가 및 5분할 배치)] ------------------
+# ------------------ [맞춤형 정보 제공 (5분할/4분할 배치)] ------------------
 if w_data and e_data:
     st.markdown(f"### 📊 {purpose} 맞춤 심층 분석")
     
@@ -492,7 +556,6 @@ if w_data and e_data:
         else:
             rate_rec = "현재 환율이 평년 수준을 유지하고 있어 계획하신 예산대로 안정적인 여행이 가능합니다."
 
-        # 💡 여행용 5개 항목을 가로로 나란히 배치 (st.columns(5))
         col_t1, col_t2, col_t3, col_t4, col_t5 = st.columns(5)
         
         with col_t1:
@@ -547,7 +610,7 @@ if w_data and e_data:
             with col:
                 st.image(city_images[idx], use_container_width=True)
         
-    else: # 무역 실무용 (4분할 가로 나란히 배치 유지)
+    else: # 무역 실무용
         if compare_rate > base_rate * 1.02:
             trade_rec = f"현재 환율({compare_rate:,.0f}원) 상회하는 <b>원화 약세장</b>: <b>수출 기업</b> 가격 경쟁력 확보 유리, <b>수입 기업</b> 원가 부담 증가로 환헤지 필수."
         elif compare_rate < base_rate * 0.98:
