@@ -111,15 +111,15 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 4. 💡 전체 지원 국가 데이터 복구 (미국, 독일, 일본, 영국, 호주)
+# 4. 💡 스페인 및 남미 국가(브라질, 아르헨티나) 추가 완료된 전체 국가 데이터
 LOCATION_DATA = {
     "미국 (뉴욕)": {
         "city": "New York", "currency": "USD", "symbol": "$", 
         "base_rate": 1350, "price_level": "약 140% (주거 및 외식비 높음)", 
         "trade_export": "자동차, 반도체, 기계류, 석유제품",
+        "trade_import": "원유, 천연가스, 항공기, 농산물",
         "trade_culture": "결론 우선 직설적 화법 선호, 계약서 상의 문서 증빙과 준법 정신을 극도로 중시",
         "trade_economy": "견조한 소비 중심 성장이나 고금리 장기화로 인한 자금 조달 비용 부담 존재",
-        "trade_tip": "주요 수출품: 자동차, 기계류. 통상 압박(IRA 등) 모니터링 필수.",
         "packing_tip": "멀티탭(110V), 편한 운동화, 일교차 겉옷",
         "must_visit": "센트럴 파크, 타임스퀘어, 브로드웨이",
         "images": [
@@ -132,9 +132,9 @@ LOCATION_DATA = {
         "city": "Berlin", "currency": "EUR", "symbol": "€", 
         "base_rate": 1450, "price_level": "약 110% (마트 물가는 저렴함)", 
         "trade_export": "자동차부품, 배터리, 화학제품, 기계",
+        "trade_import": "천연가스, 의약품, 전자제품, 원유",
         "trade_culture": "엄격한 규정과 절차 준수, 공사 구분 명확, 철저한 사전 서면 검토 요구",
         "trade_economy": "제조업 부진 및 에너지 전환 비용 증가로 인해 완만한 성장 정체 국면",
-        "trade_tip": "주요 수출품: 배터리, 화학제품. CE 인증 등 환경/안전 규제 엄격.",
         "packing_tip": "EU 어댑터, 방수 바람막이, 동전 지갑",
         "must_visit": "브란덴부르크 문, 베를린 장벽, 박물관 섬",
         "images": [
@@ -147,9 +147,9 @@ LOCATION_DATA = {
         "city": "Tokyo", "currency": "JPY", "symbol": "¥", 
         "base_rate": 900, "price_level": "약 90% (엔저로 체감 물가 낮음)", 
         "trade_export": "철강, 반도체 장비, 전자부품, 자동차",
+        "trade_import": "액화천연가스(LNG), 원유, 의류, 식료품",
         "trade_culture": "격식 있는 호칭과 철저한 비즈니스 예절(명함 교환 등), 신뢰 구축 중시",
         "trade_economy": "완만한 임금 상승과 관광객 유입으로 내수 회복세이나 엔화 변동성 주의",
-        "trade_tip": "주요 수출품: 철강, 전자부품. 품질 기준이 까다로우며 신뢰 구축에 장기 소요.",
         "packing_tip": "동전 지갑, 돼지코(110V), 숙소용 슬리퍼",
         "must_visit": "시부야 스크램블, 센소지, 도쿄타워",
         "images": [
@@ -162,9 +162,9 @@ LOCATION_DATA = {
         "city": "London", "currency": "GBP", "symbol": "£", 
         "base_rate": 1700, "price_level": "약 145% (교통비/주거비 최고 수준)", 
         "trade_export": "승용차, 의약품, 바이오, 기계류",
+        "trade_import": "원유, 천연가스, 기계장치, 귀금속",
         "trade_culture": "우회적이고 정중한 화법 사용, 비즈니스 네트워킹과 신용도 매우 중시",
         "trade_economy": "서비스 산업 중심의 경제이나 고금리 및 브렉시트 여파로 성장 둔화 압력",
-        "trade_tip": "주요 수출품: 승용차, 바이오. 독자 영국 인증(UKCA) 제도 확인 필수.",
         "packing_tip": "BF타입 어댑터, 튼튼한 3단 우산, 컨택리스 카드",
         "must_visit": "대영박물관, 런던 아이, 타워 브리지",
         "images": [
@@ -177,15 +177,60 @@ LOCATION_DATA = {
         "city": "Sydney", "currency": "AUD", "symbol": "$", 
         "base_rate": 880, "price_level": "약 130% (외식/인건비 높음)", 
         "trade_export": "석유제품, 자동차, 기계, 정밀기기",
+        "trade_import": "철광석, 석탄, 천연가스, 여행·교육 서비스",
         "trade_culture": "워라밸을 중시하며 수평적이고 실용적인 커뮤니케이션 선호",
         "trade_economy": "자원 수출 호조를 보이고 있으나 높은 인플레이션과 금리 압박 존재",
-        "trade_tip": "주요 수출품: 석유제품, 자동차. 검역(목재·식품 등) 규제가 세계 최고 수준.",
         "packing_tip": "O타입 어댑터, 자외선 차단제, 수영복",
         "must_visit": "오페라 하우스, 하버브리지, 본다이 비치",
         "images": [
             "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=600&q=80",
             "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=600&q=80",
             "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    "스페인 (마드리드)": {
+        "city": "Madrid", "currency": "EUR", "symbol": "€", 
+        "base_rate": 1450, "price_level": "약 85% (서유럽 대비 물가와 식료품비가 저렴함)", 
+        "trade_export": "자동차, 기계류, 의류(패션), 올리브유",
+        "trade_import": "원유, 천연가스, 의약품, 전자부품",
+        "trade_culture": "대면 소통과 인간관계(인맥)를 중요시하며, 격식보다는 친근하고 유연한 태도를 선호",
+        "trade_economy": "관광업 호조 및 신재생 에너지 투자 확대로 완만한 성장세를 보이나 청년 실업률 다소 높음",
+        "packing_tip": "유럽용 멀티어댑터, 선글라스, 가벼운 옷차림",
+        "must_visit": "프라도 미술관, 마요르 광장, 레티로 공원",
+        "images": [
+            "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1543785734-4b6e564642f8?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    "브라질 (상파울루)": {
+        "city": "Sao Paulo", "currency": "BRL", "symbol": "R$", 
+        "base_rate": 270, "price_level": "약 75% (공산품은 비싸지만 현지 식품 물가는 저렴함)", 
+        "trade_export": "철강, 자동차 부품, 화학제품, 전자제품",
+        "trade_import": "대두, 철광석, 원유, 육류(소고기/가금류), 커피",
+        "trade_culture": "따뜻하고 정중한 인사와 악수를 중시하며, 서두르지 않는 여유로운 비즈니스 스타일",
+        "trade_economy": "자원 및 농축산물 수출 대국이나 높은 인플레이션과 환율 변동성에 주의 필요",
+        "packing_tip": "변압기(대부분 110V/220V 혼용이나 확인 필요), 소매치기 방지 백팩, 모기 기피제",
+        "must_visit": "파울리스타 대로, 이비라푸에라 공장, 상파울루 미술관",
+        "images": [
+            "https://images.unsplash.com/photo-1531737704602-44287528e1a1?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1512813266185-3b1f5fc23015?auto=format&fit=crop&w=600&q=80"
+        ]
+    },
+    "아르헨티나 (부에노스아이레스)": {
+        "city": "Buenos Aires", "currency": "ARS", "symbol": "$", 
+        "base_rate": 1.5, "price_level": "약 60% (외국인 환율 체감상 물가가 매우 저렴하게 느껴짐)", 
+        "trade_export": "기계류, 자동차 부품, 화학제품, 플라스틱",
+        "trade_import": "곡물(대두/밀), 육류, 리튬, 원유 및 가스",
+        "trade_culture": "친근한 스킨십(볼 키스 등)과 대화를 선호하며, 개인적인 유대감을 쌓은 뒤 거래 진행",
+        "trade_economy": "만성적인 고인플레이션과 복잡한 외환 규제가 존재하므로 대금 결제 조건 리스크 관리 필수",
+        "packing_tip": "C/I 타입 겸용 어댑터, 넉넉한 현금(달러 선호), 편한 산책화",
+        "must_visit": "라보카(캄니토), 5월 광장, 오벨리스크",
+        "images": [
+            "https://images.unsplash.com/photo-1589909202874-17f975762af0?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1612294037637-ec32374e2846?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1583321500900-82807e45c03e?auto=format&fit=crop&w=600&q=80"
         ]
     }
 }
@@ -373,7 +418,7 @@ if w_data and e_data:
             with col:
                 st.image(city_images[idx], use_container_width=True)
         
-    else: # 무역 실무용 (4분할 가로 나란히 배치)
+    else: # 무역 실무용 (수출/수입 분리 4분할 가로 나란히 배치)
         if compare_rate > base_rate * 1.02:
             trade_rec = f"현재 환율({compare_rate:,.0f}원) 상회하는 <b>원화 약세장</b>: <b>수출 기업</b> 가격 경쟁력 확보 유리, <b>수입 기업</b> 원가 부담 증가로 환헤지 필수."
         elif compare_rate < base_rate * 0.98:
@@ -386,24 +431,24 @@ if w_data and e_data:
         with col_m1:
             st.markdown(f"""
             <div class="analysis-box" style="border-left-color: #DD6B20;">
-                <div class="analysis-title">📦 주요 수출입품</div>
+                <div class="analysis-title">📤 주요 수출품</div>
                 <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_export']}</div>
             </div>
             """, unsafe_allow_html=True)
             
         with col_m2:
             st.markdown(f"""
-            <div class="analysis-box" style="border-left-color: #D69E2E;">
-                <div class="analysis-title">🤝 비즈니스 문화</div>
-                <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_culture']}</div>
+            <div class="analysis-box" style="border-left-color: #3182CE;">
+                <div class="analysis-title">📥 주요 수입품</div>
+                <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_import']}</div>
             </div>
             """, unsafe_allow_html=True)
             
         with col_m3:
             st.markdown(f"""
-            <div class="analysis-box" style="border-left-color: #3182CE;">
-                <div class="analysis-title">📊 경제 상황</div>
-                <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_economy']}</div>
+            <div class="analysis-box" style="border-left-color: #D69E2E;">
+                <div class="analysis-title">🤝 비즈니스 문화</div>
+                <div class="analysis-content">{LOCATION_DATA[selected_option]['trade_culture']}</div>
             </div>
             """, unsafe_allow_html=True)
             
