@@ -1,7 +1,7 @@
 pandas
 streamlit 
 dotenv 
-load-dotenv
+python-dotenv
 requests
 folium
 streamlit_folium
