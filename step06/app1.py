@@ -2,55 +2,79 @@ import os
 from pathlib import Path
 import streamlit as st
 import requests
-from dotenv import load_dotenv  # 'load-dotenv'를 'load_dotenv'로 수정
+from dotenv import load_dotenv
 import folium
 from streamlit_folium import st_folium
 
-# 상위 폴더에 있는 .env 파일 경로 지정하여 로드
-env_path = Path(__file__).resolve().parent.parent / '.env'
-load_dotenv(dotenv_path=env_path)
-
-KAKAO_REST_API_KEY = os.getenv("KAKAO_REST_API_KEY")
-
-# 페이지 설정
+# 페이지 설정 (와이드 레이아웃)
 st.set_page_config(
-    page_title="카카오 지도 장소 검색",
-    page_icon="📍",
+    page_title="여행 감성 주변 장소 탐색",
+    page_icon="🗺️",
     layout="wide"
 )
 
-# 제목 및 안내 메시지
-st.markdown("### 📍 카테고리별 맞춤 주변 장소 검색 (반경 10km / 거리순)")
-st.info("💡 장소를 선택하면 해당 장소가 **지도의 정중앙으로 오며 확대**됩니다.")
+# 🎨 커스텀 CSS 적용 (카드 UI 및 전체적인 디자인 감성 업그레이드)
+st.markdown("""
+    <style>
+    .main {
+        background-color: #faf9f6;
+    }
+    .app-title {
+        font-family: 'Helvetica Neue', sans-serif;
+        font-weight: 700;
+        color: #2d3436;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-# API 키 확인
+# 메인 타이틀 & 안내 문구
+st.markdown("<h2 class='app-title'>🗺️ 나의 감성 여행 지도 스폿</h2>", unsafe_allow_html=True)
+st.markdown("✨ 가고 싶은 장소를 쏙쏙 골라보고, 지도로 한눈에 확인해보세요.")
+st.divider()
+
+# 📌 .env 파일 상위 폴더 경로 탐색 및 로드
+current_dir = Path(__file__).resolve().parent
+env_path = current_dir.parent / '.env'
+
+if env_path.exists():
+    load_dotenv(dotenv_path=env_path)
+else:
+    alt_env_path = current_dir / '.env'
+    if alt_env_path.exists():
+        load_dotenv(dotenv_path=alt_env_path)
+        env_path = alt_env_path
+
+KAKAO_REST_API_KEY = os.getenv("KAKAO_REST_API_KEY")
+
+# API 키 확인 및 상세 안내
 if not KAKAO_REST_API_KEY:
-    st.error(f"상위 폴더({env_path})에서 `KAKAO_REST_API_KEY`를 찾을 수 없습니다. `.env` 파일을 확인해주세요.")
+    st.error(f"⚠️ 환경 변수를 불러오지 못했습니다.")
+    st.info(f"확인된 탐색 경로: `{env_path}`\n\n상위 폴더에 `.env` 파일이 정상적으로 위치해 있는지, 파일 내부에 `KAKAO_REST_API_KEY=your_key` 형태로 작성되어 있는지 확인해주세요.")
     st.stop()
 
 # 기준 위치 설정 (기본값: 서울시청)
 DEFAULT_LAT = 37.566535  
 DEFAULT_LNG = 126.977969 
 
+# 사이드바 디자인
 with st.sidebar:
-    st.header("⚙️ 검색 설정")
-    user_lat = st.number_input("기준 위도 (Latitude)", value=DEFAULT_LAT, format="%.6f")
-    user_lng = st.number_input("기준 경도 (Longitude)", value=DEFAULT_LNG, format="%.6f")
-    st.caption("필요 시 기준 좌표를 변경할 수 있습니다.")
+    st.markdown("### 🧭 탐색 설정")
+    user_lat = st.number_input("기준 위도", value=DEFAULT_LAT, format="%.6f")
+    user_lng = st.number_input("기준 경도", value=DEFAULT_LNG, format="%.6f")
+    st.caption("여행 중심이 될 좌표를 설정하세요.")
 
-    st.divider()
-    st.markdown("### 🏷️ 카테고리 선택")
+    st.markdown("---")
+    st.markdown("### 🏷️ 카테고리 테마")
     
-    # 카카오 API 공식 카테고리 코드 매핑
     category_options = {
         "직접 입력하기": "",
-        "🍽️ 음식점": "FD6",
-        "☕ 카페": "CE7",
+        "🍽️ 맛있는 미식 탐방": "FD6",
+        "☕ 감성 카페 투어": "CE7",
         "🏪 편의점": "CS2",
         "🛒 대형마트": "MT1",
         "🏫 학교": "SC4",
         "학원": "AC5",
-        "🏨 숙박": "AD5",
+        "🏨 숙박·스테이": "AD5",
         " 은행": "BK9",
         " 병원": "HP8",
         " 약국": "PM9",
@@ -63,15 +87,15 @@ with st.sidebar:
         " 반려동물 동반/시설": "AN7"
     }
     
-    selected_category_name = st.selectbox("업종 카테고리를 선택하세요:", list(category_options.keys()), key="cat_select")
+    selected_category_name = st.selectbox("어떤 장소를 찾고 계신가요?", list(category_options.keys()), key="cat_select")
     selected_category_code = category_options[selected_category_name]
 
 # 검색어 입력 로직
 if selected_category_code == "":
-    query = st.text_input("검색하고 싶은 키워드를 입력하세요:", key="main_query_input")
+    query = st.text_input("검색하고 싶은 키워드를 입력하세요", placeholder="예: 한강공원, 소품샵 등")
 else:
     category_clean_name = selected_category_name.split()[-1] if len(selected_category_name.split()) > 1 else selected_category_name
-    sub_query = st.text_input(f"[{category_clean_name}] 상세 검색어 (선택 사항 - 비워두면 전체 검색):", key="sub_query_input")
+    sub_query = st.text_input(f"[{category_clean_name}] 상세 검색어 (선택 사항)", placeholder="비워두면 주변 전체를 보여드려요")
     query = sub_query if sub_query else category_clean_name
 
 # 검색 상태 초기화 관리
@@ -114,7 +138,7 @@ if query.strip() != "" or selected_category_code != "":
         "Authorization": f"KakaoAK {KAKAO_REST_API_KEY}"
     }
 
-    with st.spinner("주변 장소를 검색 중입니다..."):
+    with st.spinner("✨ 반짝이는 장소들을 불러오는 중이에요..."):
         response = requests.get(url, headers=headers, params=params)
 
     if response.status_code == 200:
@@ -122,13 +146,13 @@ if query.strip() != "" or selected_category_code != "":
         documents = data.get("documents", [])
 
         if documents:
-            st.success(f"반경 10km 내에 총 {len(documents)}개의 장소를 찾았습니다 (거리순 정렬)!")
+            st.success(f"🎉 반경 10km 내에서 매력적인 장소 **{len(documents)}개**를 찾았어요!")
 
-            col1, col2 = st.columns([1, 1.5])
+            col1, col2 = st.columns([1, 1.4], gap="medium")
 
             with col1:
-                st.subheader("검색 결과 목록")
-                st.caption("버튼을 누르면 선택한 장소가 지도 정중앙으로 확대됩니다.")
+                st.markdown("#### 📋 추천 스폿 리스트")
+                st.caption("버튼을 탭하면 지도가 해당 장소를 다정하게 비춰줍니다.")
 
                 for idx, place in enumerate(documents):
                     place_name = place["place_name"]
@@ -146,50 +170,48 @@ if query.strip() != "" or selected_category_code != "":
                         st.session_state.selected_idx = idx
                         st.rerun()
 
-                    data_text = f" 주소: {address}"
-                    st.text(data_text)
-                    st.text(f" 거리: 기준 위치로부터 약 {distance_km:.2f} km")
+                    st.markdown(f"<span style='color:#636e72; font-size:14px;'>🏠 {address}</span>", unsafe_allow_html=True)
+                    st.markdown(f"<span style='color:#636e72; font-size:14px;'>🚗 기준 위치로부터 {distance_km:.2f} km</span>", unsafe_allow_html=True)
                     if phone != "번호 없음":
-                        st.text(f" 연락처: {phone}")
+                        st.markdown(f"<span style='color:#636e72; font-size:14px;'>☎️ {phone}</span>", unsafe_allow_html=True)
                     
-                    st.markdown(f" 🕒 [카카오맵에서 영업시간 및 상세정보 확인하기]({place_url})", unsafe_allow_html=True)
-                    st.divider()
+                    st.markdown(f"🔗 [카카오맵 상세 정보 보기]({place_url})", unsafe_allow_html=True)
+                    st.markdown("---")
 
             with col2:
-                st.subheader("지도 시각화")
+                st.markdown("#### 🗺️ 위치 한눈에 보기")
 
                 current_idx = st.session_state.selected_idx
                 if current_idx >= len(documents):
                     current_idx = 0
 
-                # 선택된 장소의 좌표를 센터로 지정
                 selected_place = documents[current_idx]
                 center_lat = float(selected_place["y"])
                 center_lng = float(selected_place["x"])
 
-                # Folium 지도 생성
-                m = folium.Map(location=[center_lat, center_lng], zoom_start=18)
+                # 💡 API 오류 방지를 위해 기본 지도 타일(OpenStreetMap) 사용
+                m = folium.Map(location=[center_lat, center_lng], zoom_start=17)
 
-                # 1. 기준 위치 마커 (보라색 집 모양)
+                # 1. 기준 위치 마커
                 folium.Marker(
                     location=[user_lat, user_lng],
-                    popup=folium.Popup("<b>기준 위치</b>", max_width=200),
+                    popup=folium.Popup("<b>여행 시작점</b>", max_width=200),
                     tooltip="🏠 기준 위치",
-                    icon=folium.Icon(color="purple", icon="home")
+                    icon=folium.Icon(color="orange", icon="home", prefix="fa")
                 ).add_to(m)
 
-                # 2. 기준 위치 주변 반경 10km 원 표시
+                # 2. 반경 10km 감성 원 표시
                 folium.Circle(
                     location=[user_lat, user_lng],
                     radius=10000,
-                    color="#3186cc",
+                    color="#ff7675",
                     fill=True,
-                    fill_color="#3186cc",
-                    fill_opacity=0.05,
-                    tooltip="반경 10km"
+                    fill_color="#ff7675",
+                    fill_opacity=0.04,
+                    tooltip="탐색 반경 10km"
                 ).add_to(m)
 
-                # 3. 검색된 모든 장소에 마커 표시
+                # 3. 검색된 장소 마커들
                 for idx, place in enumerate(documents):
                     lat = float(place["y"])
                     lng = float(place["x"])
@@ -199,18 +221,18 @@ if query.strip() != "" or selected_category_code != "":
                     place_url = place.get("place_url", "#")
 
                     if idx == current_idx:
-                        icon = folium.Icon(color="blue", icon="star")
-                        tooltip_prefix = "⭐ [선택됨] "
+                        icon = folium.Icon(color="red", icon="heart", prefix="fa")
+                        tooltip_prefix = "💖 [선택된 스폿] "
                     else:
-                        icon = folium.Icon(color="red", icon="info-sign")
+                        icon = folium.Icon(color="blue", icon="map-pin", prefix="fa")
                         tooltip_prefix = f"{idx+1}. "
 
                     popup_html = f"""
-                    <div style="width:200px">
-                      <b>{place_name}</b><br>
-                      {address}<br>
-                      거리: {distance_km:.2f}km<br>
-                      <a href="{place_url}" target="_blank">카카오맵에서 보기</a>
+                    <div style="width:210px; font-family:sans-serif;">
+                      <b style="font-size:15px; color:#2d3436;">{place_name}</b><br>
+                      <span style="font-size:12px; color:#636e72;">{address}</span><br>
+                      <span style="font-size:12px; color:#0984e3;">거리: {distance_km:.2f}km</span><br>
+                      <a href="{place_url}" target="_blank" style="font-size:12px; text-decoration:none; color:#e17055;">카카오맵에서 열기 ➔</a>
                     </div>
                     """
 
@@ -221,11 +243,10 @@ if query.strip() != "" or selected_category_code != "":
                         icon=icon
                     ).add_to(m)
 
-                # Streamlit에 지도 렌더링
-                st_folium(m, width=700, height=550)
+                st_folium(m, width=720, height=580)
 
         else:
-            st.warning("선택하신 조건(반경 10km 내)에 맞는 장소가 없습니다. 카테고리를 변경하거나 검색어를 조정해보세요.")
+            st.warning("앗, 설정하신 조건에 딱 맞는 장소를 찾지 못했어요. 검색어나 카테고리를 살짝 바꿔볼까요?")
     else:
-        st.error(f"API 호출 중 오류가 발생했습니다. (상태 코드: {response.status_code})")
+        st.error(f"데이터를 불러오는 중 문제가 발생했어요. (코드: {response.status_code})")
         st.json(response.json())
