@@ -147,6 +147,21 @@ def get_default_coordinates(city_name):
     }
     return coord_map.get(city_name, (48.8566, 2.3522))
 
+def translate_keyword_for_overseas(kw):
+    kw_lower = kw.lower()
+    mapping = {
+        "햄버거": "burger", "버거": "burger", "피자": "pizza",
+        "스테이크": "steakhouse", "파스타": "pasta", "카페": "cafe",
+        "커피": "cafe", "맛집": "restaurant", "식당": "restaurant",
+        "빵집": "bakery", "바게트": "bakery", "디저트": "dessert",
+        "술집": "bar", "바": "bar", "관광": "attraction", "명소": "attraction",
+        "굴뚝빵": "trdelnik"
+    }
+    for kr, en in mapping.items():
+        if kr in kw_lower:
+            return en
+    return kw_lower
+
 # ==========================================
 # 2. 도시별 가이드 설정
 # ==========================================
@@ -346,7 +361,7 @@ with p_col4:
 st.markdown("---")
 
 # ==========================================
-# 5. 장소 검색 및 지도 표시 (검색어와 실시간 연동 + 구글 맵 링크 컬럼을 맨 앞으로 배치)
+# 5. 장소 검색 및 지도 표시 (실시간 검색어 연동 OpenStreetMap API 검색)
 # ==========================================
 current_address = get_reverse_geocode(lat, lon)
 
@@ -360,10 +375,9 @@ if is_korea:
         for idx, p in enumerate(places):
             dummy_rating = round(4.9 - (idx * 0.03), 2)
             place_list.append({
-                "구글/카카오 맵": p.get("place_url"),
+                "구글 맵": p.get("place_url"),
                 "평점": f"⭐ {max(dummy_rating, 4.0)}",
                 "장소명": p.get("place_name"),
-                "거리": f"{p.get('distance')}m",
                 "주소": p.get("road_address_name") or p.get("address_name"),
                 "lat": float(p.get("y")),
                 "lon": float(p.get("x"))
@@ -372,8 +386,8 @@ if is_korea:
         l_col, r_col = st.columns([1.3, 0.7])
         with l_col:
             df_places = pd.DataFrame(place_list)
-            st.dataframe(df_places[["구글/카카오 맵", "평점", "장소명", "거리", "주소"]], 
-                         column_config={"구글/카카오 맵": st.column_config.LinkColumn("🗺️ 지도 보기", display_text="📍 길찾기/위치")},
+            st.dataframe(df_places[["구글 맵", "평점", "장소명", "주소"]], 
+                         column_config={"구글 맵": st.column_config.LinkColumn("🗺️ 구글 맵", display_text="📍 위치 보기")},
                          use_container_width=True, hide_index=True)
         with r_col:
             m = folium.Map(location=[lat, lng], zoom_start=14)
@@ -386,52 +400,65 @@ else:
     st.markdown(f"### 🌍 해외 '{search_keyword}' 추천 리스트 및 지도 ({raw_city_input})")
     st.markdown(f"📌 **현재 탐색 위치 (주소):** `{current_address}`")
     
+    translated_kw = translate_keyword_for_overseas(search_keyword)
+    query_str = f"{translated_kw} in {city}"
+    
+    geo_url = f"https://nominatim.openstreetmap.org/search?q={requests.utils.quote(query_str)}&format=json&limit=20&addressdetails=1"
+    headers = {'User-Agent': 'TravelDashboard/1.0'}
+    
+    geo_res = []
+    try:
+        res = requests.get(geo_url, headers=headers, timeout=5)
+        if res.status_code == 200 and res.text.strip():
+            geo_res = res.json()
+    except Exception:
+        geo_res = []
+
+    place_list = []
     base_lat = lat if lat != 48.8566 else default_lat
     base_lon = lon if lon != 2.3522 else default_lon
-    
-    # 사용자가 입력한 search_keyword를 반영하여 15개의 맞춤형 장소 이름과 주소를 동적으로 생성
-    suffixes = ["본점", "센트럴점", "올드타운점", "스트리트점", "가든점", "스테이션점", "광장점", "골목점", "루프탑점", "마켓점", "코너점", "스페셜티", "아틀리에", "익스프레스", "클래식"]
-    place_list = []
     m = folium.Map(location=[base_lat, base_lon], zoom_start=13)
-    
-    for idx in range(1, 16):
-        dummy_rating = round(4.9 - (idx * 0.02), 2)
-        if dummy_rating < 4.1: dummy_rating = 4.1
-        
-        name = f"{raw_city_input} 최고 인기 {search_keyword} #{idx} ({suffixes[(idx-1)%len(suffixes)]})"
-        address = f"Street No. {idx*15}, {raw_city_input} Downtown Area, Metropolitan"
-        
-        s_lat = base_lat + ((idx % 5) - 2) * 0.003
-        s_lon = base_lon + ((idx // 5) - 2) * 0.003
-        
-        google_map_url = f"https://www.google.com/maps/search/?api=1&query={requests.utils.quote(f'{search_keyword} {raw_city_input}')}"
-        
-        place_list.append({
-            "구글 맵": google_map_url,
-            "평점": f"⭐ {dummy_rating}",
-            "장소명": name,
-            "주소": address
-        })
-        
-        folium.Marker(
-            [s_lat, s_lon],
-            popup=f"<b>{name}</b> (⭐ {dummy_rating})<br>{address}",
-            tooltip=name,
-            icon=folium.Icon(color="green", icon="star", prefix="fa")
-        ).add_to(m)
 
-    l_col, r_col = st.columns([1.3, 0.7])
-    with l_col:
-        st.markdown(f"#### 🏆 해외 '{search_keyword}' 평점순 추천 장소 (총 {len(place_list)}개)")
-        df_overseas = pd.DataFrame(place_list)
-        st.dataframe(
-            df_overseas[["구글 맵", "평점", "장소명", "주소"]],
-            column_config={
-                "구글 맵": st.column_config.LinkColumn("🗺️ 구글 맵", display_text="📍 위치 보기")
-            },
-            use_container_width=True,
-            hide_index=True
-        )
-    with r_col:
-        st.markdown(f"#### 🗺️ 해외 위치 지도 ({raw_city_input})")
-        st_folium(m, width=450, height=480)
+    if geo_res:
+        for idx, item in enumerate(geo_res[:15]):
+            name = item.get('name') or item.get('display_name', '').split(',')[0]
+            address = item.get('display_name', '')
+            p_lat = float(item.get('lat'))
+            p_lon = float(item.get('lon'))
+            dummy_rating = round(4.9 - (idx * 0.03), 2)
+            if dummy_rating < 4.0: dummy_rating = 4.0
+            
+            google_map_url = f"https://www.google.com/maps/search/?api=1&query={requests.utils.quote(f'{name} {raw_city_input}')}"
+            
+            place_list.append({
+                "구글 맵": google_map_url,
+                "평점": f"⭐ {dummy_rating}",
+                "장소명": name,
+                "주소": address
+            })
+            
+            folium.Marker(
+                [p_lat, p_lon],
+                popup=f"<b>{name}</b> (⭐ {dummy_rating})<br>{address}",
+                tooltip=name,
+                icon=folium.Icon(color="green", icon="star", prefix="fa")
+            ).add_to(m)
+
+    if place_list:
+        l_col, r_col = st.columns([1.3, 0.7])
+        with l_col:
+            st.markdown(f"#### 🏆 해외 '{search_keyword}' 평점순 추천 장소 (총 {len(place_list)}개)")
+            df_overseas = pd.DataFrame(place_list)
+            st.dataframe(
+                df_overseas[["구글 맵", "평점", "장소명", "주소"]],
+                column_config={
+                    "구글 맵": st.column_config.LinkColumn("🗺️ 구글 맵", display_text="📍 위치 보기")
+                },
+                use_container_width=True,
+                hide_index=True
+            )
+        with r_col:
+            st.markdown(f"#### 🗺️ 해외 위치 지도 ({raw_city_input})")
+            st_folium(m, width=450, height=480)
+    else:
+        st.warning(f"'{raw_city_input}' 내에 해당하는 '{search_keyword}' 검색 결과를 찾지 못했습니다. 다른 키워드로 검색해 보세요.")
