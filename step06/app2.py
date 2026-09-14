@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 import requests
 import streamlit as st
@@ -7,7 +8,7 @@ from streamlit_folium import st_folium
 import folium
 
 # 상위 폴더의 .env 파일 경로 설정
-env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.env'))
+env_path = Path(__file__).resolve().parent.parent / '.env'
 load_dotenv(dotenv_path=env_path)
 
 WEATHER_API_KEY = os.getenv("openweather_API_key") or os.getenv("OPENWEATHER_API_KEY")
@@ -20,7 +21,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# 비행기 배경 이미지(투명도 50%) 및 전체 글씨 키우기 스타일
+# [반응형 최적화 CSS] 모바일 화면(폭 768px 이하)에서 컬럼 배치를 세로로 전환하고 가독성을 높인 스타일
 st.markdown("""
     <style>
     .stApp {
@@ -46,6 +47,18 @@ st.markdown("""
     }
     .element-container {
         background: transparent !important;
+    }
+    
+    /* 반응형 미디어 쿼리: 모바일 기기 대응 */
+    @media (max-width: 768px) {
+        .stColumns {
+            flex-direction: column !important;
+        }
+        div[data-testid="column"] {
+            width: 100% !important;
+            flex: 1 1 100% !important;
+            min-width: 100% !important;
+        }
     }
     </style>
 """, unsafe_allow_html=True)
@@ -217,7 +230,7 @@ def translate_keyword_for_overseas(kw):
         translated = f"{kw_lower} restaurant"
     return translated
 
-# 상단 레이아웃 (날씨 + 야외활동 적합도)
+# 상단 레이아웃 (날씨 + 야외활동 적합도 판단)
 top_col1, top_col2 = st.columns(2)
 
 with top_col1:
