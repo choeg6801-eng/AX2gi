@@ -138,53 +138,7 @@ DEFAULT_GUIDE = {
     "places_landmark": ["🗼 도시 랜드마크 타워/전망대", "🌿 도심 속 대형 공원", "⛪ 역사적인 유적지 광장"]
 }
 
-def translate_city_to_english(city_str):
-    city_map = {
-        "프라하": "Prague", "런던": "London", "로마": "Rome",
-        "베를린": "Berlin", "바르셀로나": "Barcelona", "시드니": "Sydney",
-        "뮌헨": "Munich", "파리": "Paris", "도쿄": "Tokyo", 
-        "뉴욕": "New York", "서울": "Seoul", "부산": "Busan"
-    }
-    cleaned = city_str.strip()
-    return city_map.get(cleaned, cleaned)
-
-def get_default_coordinates(city_name):
-    coord_map = {
-        "Prague": (50.0755, 14.4378), "London": (51.5074, -0.1278),
-        "Rome": (41.9028, 12.4964), "Berlin": (52.5200, 13.4050),
-        "Barcelona": (41.3851, 2.1734), "Sydney": (-33.8688, 151.2093),
-        "Munich": (48.1351, 11.5820), "Paris": (48.8566, 2.3522),
-        "New York": (40.7128, -74.0060), "Tokyo": (35.6762, 139.6503),
-        "Seoul": (37.5665, 126.9780)
-    }
-    return coord_map.get(city_name, (48.8566, 2.3522))
-
-# 사이드바 설정
-st.sidebar.markdown("### 🎒 여행 설정")
-is_korea = st.sidebar.checkbox("🇰🇷 국내 여행인가요?", value=False)
-raw_city_input = st.sidebar.text_input("🌍 여행 도시명 (한글 또는 영문)", value="Prague" if not is_korea else "Seoul")
-city = translate_city_to_english(raw_city_input)
-
-default_lat, default_lon = get_default_coordinates(city)
-
-st.sidebar.markdown("### 💱 환율 설정")
-base_currency = st.sidebar.selectbox("기준 통화 (Base)", ["USD", "EUR", "JPY", "GBP", "KRW", "CNY", "AUD", "CAD", "SGD"], index=0)
-target_currency = st.sidebar.selectbox("목표 통화 (Target)", ["KRW", "USD", "EUR", "JPY", "GBP", "CNY", "AUD", "CAD", "SGD"], index=0)
-
-st.sidebar.markdown("---")
-st.sidebar.markdown("### 🗺️ 장소 및 지도 검색")
-search_keyword = st.sidebar.text_input("검색 키워드 (예: 햄버거, 맛집, 카페, 빵집)", value="햄버거" if not is_korea else "맛집")
-
-col_lat, col_lng = st.sidebar.columns(2)
-with col_lat:
-    lat = st.number_input("위도", value=37.5665 if is_korea else default_lat, format="%.4f")
-with col_lng:
-    lng = st.number_input("경도", value=126.9780 if is_korea else default_lon, format="%.4f")
-
-st.markdown(f"<h1 class='centered-title'>✈️ {raw_city_input} 맞춤형 여행 대시보드</h1>", unsafe_allow_html=True)
-st.markdown(f"<p class='centered-subtitle'><b>{raw_city_input}</b>의 실시간 날씨, 야외활동 적합도, 환율 및 맞춤 장소를 한눈에 확인하세요.</p>", unsafe_allow_html=True)
-st.markdown("---")
-
+# 보조 함수들을 호출보다 먼저 선언합니다.
 def get_weather_data(city_name, api_key):
     if not api_key:
         return None, "OpenWeather API 키가 설정되지 않았습니다."
@@ -247,6 +201,27 @@ def get_reverse_geocode(lat, lon):
         pass
     return f"위도: {lat}, 경도: {lon}"
 
+def translate_city_to_english(city_str):
+    city_map = {
+        "프라하": "Prague", "런던": "London", "로마": "Rome",
+        "베를린": "Berlin", "바르셀로나": "Barcelona", "시드니": "Sydney",
+        "뮌헨": "Munich", "파리": "Paris", "도쿄": "Tokyo", 
+        "뉴욕": "New York", "서울": "Seoul", "부산": "Busan"
+    }
+    cleaned = city_str.strip()
+    return city_map.get(cleaned, cleaned)
+
+def get_default_coordinates(city_name):
+    coord_map = {
+        "Prague": (50.0755, 14.4378), "London": (51.5074, -0.1278),
+        "Rome": (41.9028, 12.4964), "Berlin": (52.5200, 13.4050),
+        "Barcelona": (41.3851, 2.1734), "Sydney": (-33.8688, 151.2093),
+        "Munich": (48.1351, 11.5820), "Paris": (48.8566, 2.3522),
+        "New York": (40.7128, -74.0060), "Tokyo": (35.6762, 139.6503),
+        "Seoul": (37.5665, 126.9780)
+    }
+    return coord_map.get(city_name, (48.8566, 2.3522))
+
 def translate_keyword_for_overseas(kw):
     kw_lower = kw.lower()
     mapping = {
@@ -264,6 +239,32 @@ def translate_keyword_for_overseas(kw):
     if not translated:
         translated = f"{kw_lower} restaurant"
     return translated
+
+# 사이드바 설정
+st.sidebar.markdown("### 🎒 여행 설정")
+is_korea = st.sidebar.checkbox("🇰🇷 국내 여행인가요?", value=False)
+raw_city_input = st.sidebar.text_input("🌍 여행 도시명 (한글 또는 영문)", value="Prague" if not is_korea else "Seoul")
+city = translate_city_to_english(raw_city_input)
+
+default_lat, default_lon = get_default_coordinates(city)
+
+st.sidebar.markdown("### 💱 환율 설정")
+base_currency = st.sidebar.selectbox("기준 통화 (Base)", ["USD", "EUR", "JPY", "GBP", "KRW", "CNY", "AUD", "CAD", "SGD"], index=0)
+target_currency = st.sidebar.selectbox("목표 통화 (Target)", ["KRW", "USD", "EUR", "JPY", "GBP", "CNY", "AUD", "CAD", "SGD"], index=0)
+
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 🗺️ 장소 및 지도 검색")
+search_keyword = st.sidebar.text_input("검색 키워드 (예: 햄버거, 맛집, 카페, 빵집)", value="햄버거" if not is_korea else "맛집")
+
+col_lat, col_lng = st.sidebar.columns(2)
+with col_lat:
+    lat = st.number_input("위도", value=37.5665 if is_korea else default_lat, format="%.4f")
+with col_lng:
+    lng = st.number_input("경도", value=126.9780 if is_korea else default_lon, format="%.4f")
+
+st.markdown(f"<h1 class='centered-title'>✈️ {raw_city_input} 맞춤형 여행 대시보드</h1>", unsafe_allow_html=True)
+st.markdown(f"<p class='centered-subtitle'><b>{raw_city_input}</b>의 실시간 날씨, 야외활동 적합도, 환율 및 맞춤 장소를 한눈에 확인하세요.</p>", unsafe_allow_html=True)
+st.markdown("---")
 
 # 상단 레이아웃 (날씨 + 야외활동 적합도 판단)
 top_col1, top_col2 = st.columns(2)
@@ -352,7 +353,7 @@ with p_col4:
 
 st.markdown("---")
 
-# 장소 검색 및 지도 (현재 위치 주소 명시 포함)
+# 장소 검색 및 지도 (함수 정의가 위로 올라갔으므로 정상 동작합니다)
 current_address = get_reverse_geocode(lat, lon)
 
 if is_korea:
