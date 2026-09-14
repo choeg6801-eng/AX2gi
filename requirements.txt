@@ -3,3 +3,8 @@ streamlit
 dotenv 
 load_dotenv
 requests
+folium
+streamlit_folium
+os
+pathlib
+
