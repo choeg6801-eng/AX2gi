@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 import streamlit as st
 import requests
-from dotenv import load_dotenv
+from dotenv import load_dotenv  # 'load-dotenv'를 'load_dotenv'로 수정
 import folium
 from streamlit_folium import st_folium
 
@@ -146,12 +146,13 @@ if query.strip() != "" or selected_category_code != "":
                         st.session_state.selected_idx = idx
                         st.rerun()
 
-                    st.text(f"  주소: {address}")
-                    st.text(f"  거리: 기준 위치로부터 약 {distance_km:.2f} km")
+                    data_text = f" 주소: {address}"
+                    st.text(data_text)
+                    st.text(f" 거리: 기준 위치로부터 약 {distance_km:.2f} km")
                     if phone != "번호 없음":
-                        st.text(f"  연락처: {phone}")
+                        st.text(f" 연락처: {phone}")
                     
-                    st.markdown(f"  🕒 [카카오맵에서 영업시간 및 상세정보 확인하기]({place_url})", unsafe_allow_html=True)
+                    st.markdown(f" 🕒 [카카오맵에서 영업시간 및 상세정보 확인하기]({place_url})", unsafe_allow_html=True)
                     st.divider()
 
             with col2:
@@ -161,12 +162,12 @@ if query.strip() != "" or selected_category_code != "":
                 if current_idx >= len(documents):
                     current_idx = 0
 
-                # ★ 핵심: 선택된 장소의 좌표를 완벽한 지도 센터로 지정 ★
+                # 선택된 장소의 좌표를 센터로 지정
                 selected_place = documents[current_idx]
                 center_lat = float(selected_place["y"])
                 center_lng = float(selected_place["x"])
 
-                # Folium 지도 생성 (줌 레벨 18로 바짝 확대하여 선택 장소가 정확히 정중앙에 오도록 설정)
+                # Folium 지도 생성
                 m = folium.Map(location=[center_lat, center_lng], zoom_start=18)
 
                 # 1. 기준 위치 마커 (보라색 집 모양)
@@ -198,11 +199,9 @@ if query.strip() != "" or selected_category_code != "":
                     place_url = place.get("place_url", "#")
 
                     if idx == current_idx:
-                        # 선택된 장소: 파란색 별 아이콘
                         icon = folium.Icon(color="blue", icon="star")
                         tooltip_prefix = "⭐ [선택됨] "
                     else:
-                        # 나머지 장소: 빨간색 아이콘
                         icon = folium.Icon(color="red", icon="info-sign")
                         tooltip_prefix = f"{idx+1}. "
 
