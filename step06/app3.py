@@ -113,8 +113,8 @@ def get_kakao_places(keyword, x, y, api_key):
         return None, str(e)
     return None, "카카오맵 API 오류"
 
-def get_reverse_geocode(lat, lon):
-    url = f"https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json&accept-language=ko"
+def get_reverse_geocode(lat_val, lon_val):
+    url = f"https://nominatim.openstreetmap.org/reverse?lat={lat_val}&lon={lon_val}&format=json&accept-language=ko"
     headers = {'User-Agent': 'TravelDashboard/1.0'}
     try:
         res = requests.get(url, headers=headers, timeout=5)
@@ -124,7 +124,7 @@ def get_reverse_geocode(lat, lon):
                 return data["display_name"]
     except Exception:
         pass
-    return f"위도: {lat}, 경도: {lon}"
+    return f"위도: {lat_val}, 경도: {lon_val}"
 
 def translate_city_to_english(city_str):
     city_map = {
@@ -245,7 +245,7 @@ DEFAULT_GUIDE = {
 }
 
 # ==========================================
-# 3. 사이드바 입력 컴포넌트 선언 (lat, lon 변수가 여기서 만들어짐)
+# 3. 사이드바 설정 및 안전한 위도/경도 초기화
 # ==========================================
 st.sidebar.markdown("### 🎒 여행 설정")
 is_korea = st.sidebar.checkbox("🇰🇷 국내 여행인가요?", value=False)
@@ -262,11 +262,15 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("### 🗺️ 장소 및 지도 검색")
 search_keyword = st.sidebar.text_input("검색 키워드 (예: 햄버거, 맛집, 카페, 빵집)", value="햄버거" if not is_korea else "맛집")
 
+# 에러 원인이었던 부분: 컬럼 안에서 값을 받아오되 전역 변수 lat, lon을 확실히 보장
 col_lat, col_lng = st.sidebar.columns(2)
 with col_lat:
     lat = st.number_input("위도", value=37.5665 if is_korea else default_lat, format="%.4f")
 with col_lng:
     lng = st.number_input("경도", value=126.9780 if is_korea else default_lon, format="%.4f")
+
+# 안전을 위해 lon 변수명을 명확히 동기화
+lon = lng
 
 st.markdown(f"<h1 class='centered-title'>✈️ {raw_city_input} 맞춤형 여행 대시보드</h1>", unsafe_allow_html=True)
 st.markdown(f"<p class='centered-subtitle'><b>{raw_city_input}</b>의 실시간 날씨, 야외활동 적합도, 환율 및 맞춤 장소를 한눈에 확인하세요.</p>", unsafe_allow_html=True)
@@ -362,7 +366,7 @@ with p_col4:
 st.markdown("---")
 
 # ==========================================
-# 5. 장소 검색 및 지도 표시 (lat, lon이 정의된 이후 안전하게 호출)
+# 5. 장소 검색 및 지도 표시 (lat, lon이 확실히 정의된 후 안전하게 호출)
 # ==========================================
 current_address = get_reverse_geocode(lat, lon)
 
@@ -437,7 +441,7 @@ else:
                 valid_items.append((item, name))
 
     base_lat = lat if lat != 48.8566 else default_lat
-    base_lon = lng if lng != 2.3522 else default_lon
+    base_lon = lon if lon != 2.3522 else default_lon
     
     if city.lower() == "prague":
         extra_spots = [
