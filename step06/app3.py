@@ -62,7 +62,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 1. 모든 보조 함수 정의 (최상단 배치)
+# 1. 보조 함수 정의
 # ==========================================
 def get_weather_data(city_name, api_key):
     if not api_key:
@@ -245,7 +245,7 @@ DEFAULT_GUIDE = {
 }
 
 # ==========================================
-# 3. 사이드바 및 UI 입력 설정
+# 3. 사이드바 입력 컴포넌트 선언 (lat, lon 변수가 여기서 만들어짐)
 # ==========================================
 st.sidebar.markdown("### 🎒 여행 설정")
 is_korea = st.sidebar.checkbox("🇰🇷 국내 여행인가요?", value=False)
@@ -273,7 +273,7 @@ st.markdown(f"<p class='centered-subtitle'><b>{raw_city_input}</b>의 실시간 
 st.markdown("---")
 
 # ==========================================
-# 4. 메인 화면 레이아웃 및 로직 실행
+# 4. 메인 대시보드 UI 및 로직 실행
 # ==========================================
 top_col1, top_col2 = st.columns(2)
 
@@ -361,7 +361,9 @@ with p_col4:
 
 st.markdown("---")
 
-# 장소 검색 및 지도
+# ==========================================
+# 5. 장소 검색 및 지도 표시 (lat, lon이 정의된 이후 안전하게 호출)
+# ==========================================
 current_address = get_reverse_geocode(lat, lon)
 
 if is_korea:
