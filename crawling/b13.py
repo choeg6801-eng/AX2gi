@@ -9,4 +9,7 @@ response= requests.get("https://www.google.com")
 html = response.text 
 
 soup= BeautifulSoup(html, "html.parser")
+logo= soup.select_one().txt
+subtitle = soup.select_one().txt
 
+print(logo,subtitle)

@@ -21,7 +21,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# [반응형 최적화 CSS] 모바일 화면(폭 768px 이하)에서 컬럼 배치를 세로로 전환하고 가독성을 높인 스타일
+# 모바일 반응형 및 스타일 설정
 st.markdown("""
     <style>
     .stApp {
@@ -48,8 +48,6 @@ st.markdown("""
     .element-container {
         background: transparent !important;
     }
-    
-    /* 반응형 미디어 쿼리: 모바일 기기 대응 */
     @media (max-width: 768px) {
         .stColumns {
             flex-direction: column !important;
@@ -72,6 +70,30 @@ CITY_GUIDE = {
         "places_activity": ["⛵ 센강 유람선(바토무슈) 탑승", "🍷 프랑스 와인 시음 클래스", "🥖 바게트 만들기 원데이 클래스"],
         "places_shopping": ["🛍️ 갤러리 라파예트 백화점", "🕯️ 르메르 & 아페쎄 플래그십 스토어", "📚 셰익스피어 앤 컴퍼니 서점"],
         "places_landmark": ["🗼 에펠탑", "⛪ 노트르담 대성당", "🏛️ 개선문 & 샹젤리제 거리"]
+    },
+    "prague": {
+        "food_meal": ["🍖 굴라쉬 (Goulash)", "🥩 꼴레뇨 (Koleno - 전통 돼지고기족발구이)", "🧀 오리 구이 & 감자만두"],
+        "food_dessert": ["🥖 굴뚝빵 (Trdelník)", "🍺 체코 필스너 우르켈 생맥주", "🥮 체코 전통 허니케이크 (Marlenka)"],
+        "places_art": ["🖼️ 프레즈노 박물관", "🏛️ 국립 미술관", "🎨 프라하 성 국립 갤러리"],
+        "places_activity": ["⛵ 블타바 강 유람선 야경 투어", "🍺 프라하 맥주 스파 체험", "🎻 카를교 야경 산책"],
+        "places_shopping": ["🛍️ 팔라디움 쇼핑센터", "🎁 하벨 시장 (Havelské tržiště)", "🕯️ 보헤미안 크리스탈 상점가"],
+        "places_landmark": ["🌉 카를교 (Charles Bridge)", "🏰 프라하 성 (Prague Castle)", "⏰ 구시가 광장 천문시계"]
+    },
+    "london": {
+        "food_meal": ["🥧 피치 & 스테이크 파이", "🐟 피시 앤 칩스 (Fish and Chips)", "🍛 영국식 치킨 티카 마살라"],
+        "food_dessert": ["🫖 애프터눈 티 세트 & 스콘", "🍮 스티키 토피 푸딩", "🍫 영국 전통 퍼지 (Fudge)"],
+        "places_art": ["🖼️ 대영 박물관 (British Museum)", "🏛️ 내셔널 갤러리", "🎨 테이트 모던"],
+        "places_activity": ["🎭 런던 웨스트엔드 뮤지컬 관람", "🎡 런던 아이 탑승", " Thames 템즈강 유람선 투어"],
+        "places_shopping": ["🛍️ 해러즈 백화점 (Harrods)", "🎁 코벤트 가든 시장", "🧵 옥스퍼드 스트리트 쇼핑가"],
+        "places_landmark": ["🕰️ 빅벤 & 국회의사당", "🌉 타워 브리지", "👑 런던 탑"]
+    },
+    "rome": {
+        "food_meal": ["🍝 까르보나라 파이프 (정통 로마식)", "🍕 로마식 얇은 피자 (Pizza Romana)", "🥩 소꼬리 찜 요리 (Coda alla Vaccinara)"],
+        "food_dessert": ["🍨 정통 수제 젤라또", "☕ 이탈리안 에스프레소 & 티라미수", "🥮 카놀리 파이"],
+        "places_art": ["🖼️ 바티칸 박물관 & 시스티나 성당", "🏛️ 보르게세 미술관", "🎨 카피톨리니 미술관"],
+        "places_activity": ["🪙 트레비 분수 동전 던지기 체험", "🍷 이탈리아 와인 & 파스타 쿠킹 클래스", "🛵 로마 시내 스쿠터 야경 투어"],
+        "places_shopping": ["🛍️ 콘도티 거리 (Via Condotti) 명품가", "🎁 나보나 광장 기념품 상점", "🧵 콜로세움 인근 가죽 공방 거리"],
+        "places_landmark": ["🏛️ 콜로세움 (Colosseum)", "🪙 트레비 분수", "🏛️ 판테온 신전"]
     },
     "munich": {
         "food_meal": ["🍖 슈바인스학세 (Schweinshaxe)", "🥨 독일 바이에른 프레첼 (Pretzel)", "🥩 바이에른 소시지 (Weisswurst)"],
@@ -116,21 +138,49 @@ DEFAULT_GUIDE = {
     "places_landmark": ["🗼 도시 랜드마크 타워/전망대", "🌿 도심 속 대형 공원", "⛪ 역사적인 유적지 광장"]
 }
 
+# 한글 도시명을 OpenWeather 및 API용 영문명으로 변환해 주는 매퍼 (확장)
 def translate_city_to_english(city_str):
     city_map = {
-        "뮌헨": "Munich", "파리": "Paris", "런던": "London",
-        "도쿄": "Tokyo", "뉴욕": "New York", "로마": "Rome",
-        "베를린": "Berlin", "바르셀로나": "Barcelona", "시드니": "Sydney",
-        "서울": "Seoul", "부산": "Busan"
+        "프라하": "Prague",
+        "런던": "London",
+        "로마": "Rome",
+        "베를린": "Berlin",
+        "바르셀로나": "Barcelona",
+        "시드니": "Sydney",
+        "뮌헨": "Munich", 
+        "파리": "Paris", 
+        "도쿄": "Tokyo", 
+        "뉴욕": "New York", 
+        "서울": "Seoul", 
+        "부산": "Busan"
     }
     cleaned = city_str.strip()
     return city_map.get(cleaned, cleaned)
 
+# 도시별 기본 좌표 자동 매칭 함수 (확장)
+def get_default_coordinates(city_name):
+    coord_map = {
+        "Prague": (50.0755, 14.4378),
+        "London": (51.5074, -0.1278),
+        "Rome": (41.9028, 12.4964),
+        "Berlin": (52.5200, 13.4050),
+        "Barcelona": (41.3851, 2.1734),
+        "Sydney": (-33.8688, 151.2093),
+        "Munich": (48.1351, 11.5820),
+        "Paris": (48.8566, 2.3522),
+        "New York": (40.7128, -74.0060),
+        "Tokyo": (35.6762, 139.6503),
+        "Seoul": (37.5665, 126.9780)
+    }
+    return coord_map.get(city_name, (48.8566, 2.3522))
+
 # 사이드바 설정
 st.sidebar.markdown("### 🎒 여행 설정")
 is_korea = st.sidebar.checkbox("🇰🇷 국내 여행인가요?", value=False)
-raw_city_input = st.sidebar.text_input("🌍 여행 도시명 (한글 또는 영문)", value="New York" if not is_korea else "Seoul")
+raw_city_input = st.sidebar.text_input("🌍 여행 도시명 (한글 또는 영문)", value="Prague" if not is_korea else "Seoul")
 city = translate_city_to_english(raw_city_input)
+
+default_lat, default_lon = get_default_coordinates(city)
 
 st.sidebar.markdown("### 💱 환율 설정")
 base_currency = st.sidebar.selectbox("기준 통화 (Base)", ["USD", "EUR", "JPY", "GBP", "KRW", "CNY", "AUD", "CAD", "SGD"], index=0)
@@ -142,9 +192,9 @@ search_keyword = st.sidebar.text_input("검색 키워드 (예: 햄버거, 맛집
 
 col_lat, col_lng = st.sidebar.columns(2)
 with col_lat:
-    lat = st.number_input("위도", value=37.5665 if is_korea else 40.7128, format="%.4f")
+    lat = st.number_input("위도", value=37.5665 if is_korea else default_lat, format="%.4f")
 with col_lng:
-    lng = st.number_input("경도", value=126.9780 if is_korea else -74.0060, format="%.4f")
+    lng = st.number_input("경도", value=126.9780 if is_korea else default_lon, format="%.4f")
 
 st.markdown(f"<h1 class='centered-title'>✈️ {raw_city_input} 맞춤형 여행 대시보드</h1>", unsafe_allow_html=True)
 st.markdown(f"<p class='centered-subtitle'><b>{raw_city_input}</b>의 실시간 날씨, 야외활동 적합도, 환율 및 맞춤 장소를 한눈에 확인하세요.</p>", unsafe_allow_html=True)
@@ -318,7 +368,7 @@ with p_col4:
 st.markdown("---")
 
 # 장소 검색 및 지도 (현재 위치 주소 명시 포함)
-current_address = get_reverse_geocode(lat, lng)
+current_address = get_reverse_geocode(lat, lon)
 
 if is_korea:
     st.markdown(f"### 🇰🇷 국내 '{search_keyword}' 추천 리스트 및 지도")
@@ -390,10 +440,71 @@ else:
             if name:
                 valid_items.append((item, name))
 
-    base_lat = lat if lat != 48.8566 else (40.7128 if city.lower() == "new york" else 48.8566)
-    base_lon = lng if lng != 2.3522 else (-74.0060 if city.lower() == "new york" else 2.3522)
+    base_lat = lat if lat != 48.8566 else default_lat
+    base_lon = lng if lng != 2.3522 else default_lon
     
-    if city.lower() == "new york":
+    # 각 도시별 맞춤형 추천 장소 안전망 데이터
+    if city.lower() == "prague":
+        extra_spots = [
+            ("Kantyna (Prague)", base_lat + 0.002, base_lon - 0.001),
+            ("Dish Fine Burger Bistro", base_lat + 0.005, base_lon + 0.003),
+            ("Bad Flash Bar", base_lat + 0.012, base_lon - 0.002),
+            ("Naše maso", base_lat - 0.004, base_lon - 0.003),
+            ("Hard Rock Cafe Prague", base_lat - 0.008, base_lon + 0.015),
+            ("Lokál Dlouhááá", base_lat + 0.015, base_lon + 0.008),
+            ("Fat Cat Snack & Bar", base_lat - 0.003, base_lon - 0.005)
+        ]
+    elif city.lower() == "london":
+        extra_spots = [
+            ("Honest Burgers Soho", base_lat + 0.002, base_lon - 0.001),
+            ("Flat Iron Covent Garden", base_lat + 0.005, base_lon + 0.003),
+            ("Burger & Lobster Soho", base_lat + 0.012, base_lon - 0.002),
+            ("Dishoom Covent Garden", base_lat - 0.004, base_lon - 0.003),
+            ("The Churchill Arms Pub", base_lat - 0.008, base_lon + 0.015),
+            ("Hawksmoor Seven Dials", base_lat + 0.015, base_lon + 0.008),
+            ("Borough Market Food Stalls", base_lat - 0.003, base_lon - 0.005)
+        ]
+    elif city.lower() == "rome":
+        extra_spots = [
+            ("Tonnarello (Trastevere)", base_lat + 0.002, base_lon - 0.001),
+            ("Roscioli Salumeria con Cucina", base_lat + 0.005, base_lon + 0.003),
+            ("Da Enzo al 29", base_lat + 0.012, base_lon - 0.002),
+            ("Antico Forno Roscioli", base_lat - 0.004, base_lon - 0.003),
+            ("Dar Poeta Pizza", base_lat - 0.008, base_lon + 0.015),
+            ("Cantina & Cucina", base_lat + 0.015, base_lon + 0.008),
+            ("Gelateria del Teatro", base_lat - 0.003, base_lon - 0.005)
+        ]
+    elif city.lower() == "berlin":
+        extra_spots = [
+            ("Burgermeister Schlesisches Tor", base_lat + 0.002, base_lon - 0.001),
+            ("Mustafa's Gemüse Kebap", base_lat + 0.005, base_lon + 0.003),
+            ("Curry 36 Kreuzberg", base_lat + 0.012, base_lon - 0.002),
+            ("Monsieur Vuong", base_lat - 0.004, base_lon - 0.003),
+            ("Markthalle Neun Street Food", base_lat - 0.008, base_lon + 0.015),
+            ("The Bird Steakhouse", base_lat + 0.015, base_lon + 0.008),
+            ("Zeit für Brot Bakery", base_lat - 0.003, base_lon - 0.005)
+        ]
+    elif city.lower() == "barcelona":
+        extra_spots = [
+            ("El Nacional Barcelona", base_lat + 0.002, base_lon - 0.001),
+            ("Ciudad Condal", base_lat + 0.005, base_lon + 0.003),
+            ("Cal Pep Tapas Bar", base_lat + 0.012, base_lon - 0.002),
+            ("La Boqueria Market Stalls", base_lat - 0.004, base_lon - 0.003),
+            ("Quimet & Quimet", base_lat - 0.008, base_lon + 0.015),
+            ("Bormuth Tapas", base_lat + 0.015, base_lon + 0.008),
+            ("Bar Mut", base_lat - 0.003, base_lon - 0.005)
+        ]
+    elif city.lower() == "sydney":
+        extra_spots = [
+            ("Pancakes on the Rocks", base_lat + 0.002, base_lon - 0.001),
+            ("Hurricane's Grill Darling Harbour", base_lat + 0.005, base_lon + 0.003),
+            ("Sydney Fish Market", base_lat + 0.012, base_lon - 0.002),
+            ("Bills Surry Hills", base_lat - 0.004, base_lon - 0.003),
+            ("Rockpool Bar & Grill", base_lat - 0.008, base_lon + 0.015),
+            ("The Grounds of Alexandria", base_lat + 0.015, base_lon + 0.008),
+            ("Black Bar & Grill", base_lat - 0.003, base_lon - 0.005)
+        ]
+    elif city.lower() == "new york":
         extra_spots = [
             ("Shake Shack (Madison Square Park)", base_lat + 0.002, base_lon - 0.001),
             ("Burger Joint (Le Parker Meridien)", base_lat + 0.005, base_lon + 0.003),
@@ -401,18 +512,7 @@ else:
             ("Minetta Tavern (Greenwich Village)", base_lat - 0.004, base_lon - 0.003),
             ("Peter Luger Steak House Burger", base_lat - 0.008, base_lon + 0.015),
             ("Riverpark", base_lat + 0.015, base_lon + 0.008),
-            ("The Spotted Pig Style Bar", base_lat - 0.003, base_lon - 0.005),
-            ("Corner Bistro (West Village)", base_lat - 0.006, base_lon - 0.004),
-            ("Black Tap Craft Burgers & Beer", base_lat + 0.004, base_lon - 0.002),
-            ("Harlem Shake", base_lat + 0.025, base_lon - 0.010),
-            ("Umberto's Clam House Burger", base_lat - 0.010, base_lon + 0.002),
-            ("Aux Merveilles de Fred", base_lat + 0.001, base_lon + 0.001),
-            ("Lure Fishbar Burger", base_lat - 0.005, base_lon - 0.001),
-            ("The Breslin Bar & Dining Room", base_lat + 0.003, base_lon - 0.003),
-            ("Paul's Da Burger Joint", base_lat - 0.007, base_lon - 0.003),
-            ("Salvation Burger Spot", base_lat + 0.009, base_lon + 0.004),
-            ("Bareburger (East Village)", base_lat - 0.002, base_lon + 0.006),
-            ("Ritz Diner & Burger Bar", base_lat + 0.014, base_lon - 0.007)
+            ("The Spotted Pig Style Bar", base_lat - 0.003, base_lon - 0.005)
         ]
     else:
         extra_spots = [
@@ -422,15 +522,7 @@ else:
             (f"Downtown Trendy {search_keyword}", base_lat - 0.004, base_lon - 0.002),
             (f"Classic {search_keyword} Diner & Pub", base_lat + 0.005, base_lon - 0.001),
             (f"Local Artisan {search_keyword}", base_lat - 0.003, base_lon + 0.005),
-            (f"Royal {search_keyword} Lounge", base_lat + 0.007, base_lon - 0.004),
-            (f"Boutique {search_keyword} Kitchen", base_lat - 0.005, base_lon + 0.003),
-            (f"Sunset {search_keyword} Terrace", base_lat + 0.002, base_lon - 0.006),
-            (f"Prime {search_keyword} Grill", base_lat - 0.001, base_lon + 0.007),
-            (f"Hidden Gem {search_keyword}", base_lat + 0.006, base_lon + 0.001),
-            (f"Central {search_keyword} Station", base_lat - 0.006, base_lon - 0.003),
-            (f"Elite {search_keyword} Bar", base_lat + 0.004, base_lon - 0.005),
-            (f"Market {search_keyword} Stand", base_lat - 0.008, base_lon + 0.002),
-            (f"Pioneer {search_keyword} House", base_lat + 0.010, base_lon - 0.002)
+            (f"Royal {search_keyword} Lounge", base_lat + 0.007, base_lon - 0.004)
         ]
 
     combined_items = valid_items.copy()
