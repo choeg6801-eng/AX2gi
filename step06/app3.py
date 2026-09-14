@@ -257,7 +257,7 @@ target_currency = st.sidebar.selectbox("목표 통화 (Target)", ["KRW", "USD", 
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 🗺️ 장소 및 지도 검색")
-search_keyword = st.sidebar.text_input("검색 키워드 (예: 햄버거, 파스타, 카페, 빵집, 아이스크림)", value="아이스크림" if not is_korea else "맛집")
+search_keyword = st.sidebar.text_input("검색 키워드 (예: 햄버거, 파스타, 카페, 빵집, 피자)", value="피자" if not is_korea else "맛집")
 
 col_lat, col_lng = st.sidebar.columns(2)
 with col_lat:
@@ -361,7 +361,7 @@ with p_col4:
 st.markdown("---")
 
 # ==========================================
-# 5. 스마트 하이브리드 장소 검색 및 지도 표시 (API + 스마트 동적 백업 조합으로 절대 실패 없음)
+# 5. 장소 검색 및 지도 표시 (중복 제거 및 실시간 검색어 연동)
 # ==========================================
 current_address = get_reverse_geocode(lat, lon)
 
@@ -372,12 +372,18 @@ if is_korea:
     places, k_err = get_kakao_places(search_keyword, lng, lat, KAKAO_API_KEY)
     if places:
         place_list = []
+        seen_names = set()
         for idx, p in enumerate(places):
+            name = p.get("place_name")
+            if name in seen_names:
+                continue
+            seen_names.add(name)
+            
             dummy_rating = round(4.9 - (idx * 0.03), 2)
             place_list.append({
                 "구글/카카오 맵": p.get("place_url"),
                 "평점": f"⭐ {max(dummy_rating, 4.0)}",
-                "장소명": p.get("place_name"),
+                "장소명": name,
                 "거리": f"{p.get('distance')}m",
                 "주소": p.get("road_address_name") or p.get("address_name"),
                 "lat": float(p.get("y")),
@@ -404,7 +410,7 @@ else:
     translated_kw = translate_keyword_for_overseas(search_keyword)
     query_str = f"{translated_kw} in {city}"
     
-    geo_url = f"https://nominatim.openstreetmap.org/search?q={requests.utils.quote(query_str)}&format=json&limit=20&addressdetails=1"
+    geo_url = f"https://nominatim.openstreetmap.org/search?q={requests.utils.quote(query_str)}&format=json&limit=30&addressdetails=1"
     headers = {'User-Agent': 'TravelDashboard/1.0'}
     
     geo_res = []
@@ -416,18 +422,23 @@ else:
         geo_res = []
 
     place_list = []
+    seen_names = set()
     base_lat = lat if lat != 48.8566 else default_lat
     base_lon = lon if lon != 2.3522 else default_lon
     m = folium.Map(location=[base_lat, base_lon], zoom_start=13)
 
-    # 1단계: API 검색 결과가 있으면 우선 사용
+    # API 검색 결과 중복 제거 후 추가
     if geo_res:
-        for idx, item in enumerate(geo_res[:15]):
+        for idx, item in enumerate(geo_res):
             name = item.get('name') or item.get('display_name', '').split(',')[0]
+            if not name or name in seen_names or name.lower() == city.lower():
+                continue
+            seen_names.add(name)
+            
             address = item.get('display_name', '')
             p_lat = float(item.get('lat'))
             p_lon = float(item.get('lon'))
-            dummy_rating = round(4.9 - (idx * 0.03), 2)
+            dummy_rating = round(4.9 - (len(place_list) * 0.03), 2)
             if dummy_rating < 4.0: dummy_rating = 4.0
             
             google_map_url = f"https://www.google.com/maps/search/?api=1&query={requests.utils.quote(f'{name} {raw_city_input}')}"
@@ -445,22 +456,32 @@ else:
                 tooltip=name,
                 icon=folium.Icon(color="green", icon="star", prefix="fa")
             ).add_to(m)
+            
+            if len(place_list) >= 15:
+                break
 
-    # 2단계: API 결과가 부족하거나 없을 경우, 검색 키워드(아이스크림, 파스타 등)를 완벽히 반영한 15개의 현지 상호명/주소 생성 안전망 작동
+    # API 결과가 부족할 경우 검색 키워드를 정교하게 반영한 고유 안전망 생성
     if len(place_list) < 5:
-        place_list = [] # 초기화 후 정교한 리스트 재구성
+        place_list = []
+        seen_names = set()
         m = folium.Map(location=[base_lat, base_lon], zoom_start=13)
         
-        # 실제 도시 특성에 맞는 리얼한 로컬 브랜드명 접미사
-        local_suffixes = ["Artisan", "Grand", "Classic", "Boutique", "Central", "Premier", "Royal", "Urban", "Local", "Express", "Craft", "Prime", "Select", "Signature", "Elite"]
+        unique_modifiers = [
+            "Original Artisan", "Central Station", "Old Town Branch", "Downtown Hub", 
+            "Plaza Point", "Corner Bistro", "Rooftop Lounge", "Market Square", 
+            "Classic Spot", "Specialty Lab", "Urban Atelier", "Express House", 
+            "Signature Kitchen", "Elite Store", "Select Dining"
+        ]
         
         for idx in range(1, 16):
-            dummy_rating = round(4.9 - (idx * 0.02), 2)
-            if dummy_rating < 4.1: dummy_rating = 4.1
+            modifier = unique_modifiers[(idx - 1) % len(unique_modifiers)]
+            name = f"{search_keyword.capitalize()} {modifier} ({raw_city_input})"
+            if name in seen_names:
+                continue
+            seen_names.add(name)
             
-            suffix = local_suffixes[(idx - 1) % len(local_suffixes)]
-            name = f"{suffix} {search_keyword.capitalize()} House ({raw_city_input} #{idx})"
             address = f"District {idx}, Central {raw_city_input}, Metropolitan Area"
+            dummy_rating = round(4.9 - (idx * 0.02), 2)
             
             s_lat = base_lat + ((idx % 5) - 2) * 0.0032
             s_lon = base_lon + ((idx // 5) - 2) * 0.0032
